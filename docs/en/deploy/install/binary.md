@@ -4,25 +4,25 @@
 This page is still being improved. Some details may not be fully accurate — please refer to the actual behavior when in doubt.
 :::
 
-Install Podux using pre-compiled binaries — ideal for running directly on a server or local machine.
+Install Nodus using pre-compiled binaries — ideal for running directly on a server or local machine.
 
 ## Download
 
-Go to the [GitHub Releases](https://github.com/luckjiawei/podux/releases/latest) page and download the package for your platform:
+Go to the [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) page and download the package for your platform:
 
 | OS | Architecture | Filename |
 | --- | --- | --- |
-| Linux | x86_64 (amd64) | `podux-linux-amd64.tar.gz` |
-| Linux | ARM64 | `podux-linux-arm64.tar.gz` |
-| Linux | ARMv7 | `podux-linux-armv7.tar.gz` |
-| macOS | Intel | `podux-darwin-amd64.tar.gz` |
-| macOS | Apple Silicon | `podux-darwin-arm64.tar.gz` |
-| Windows | x86_64 | `podux-windows-amd64.zip` |
+| Linux | x86_64 (amd64) | `Nodus-linux-amd64.tar.gz` |
+| Linux | ARM64 | `Nodus-linux-arm64.tar.gz` |
+| Linux | ARMv7 | `Nodus-linux-armv7.tar.gz` |
+| macOS | Intel | `Nodus-darwin-amd64.tar.gz` |
+| macOS | Apple Silicon | `Nodus-darwin-arm64.tar.gz` |
+| Windows | x86_64 | `Nodus-windows-amd64.zip` |
 
 Or download directly from the command line (Linux amd64 example):
 
 ```bash
-curl -LO https://github.com/luckjiawei/podux/releases/latest/download/podux-linux-amd64.tar.gz
+curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
 ```
 
 ## Install
@@ -31,16 +31,16 @@ curl -LO https://github.com/luckjiawei/podux/releases/latest/download/podux-linu
 
 ```bash
 # Extract
-tar -xzf podux-linux-amd64.tar.gz
+tar -xzf Nodus-linux-amd64.tar.gz
 
 # Move to system path (optional)
-sudo mv podux /usr/local/bin/
+sudo mv Nodus /usr/local/bin/
 
 # Make executable
-sudo chmod +x /usr/local/bin/podux
+sudo chmod +x /usr/local/bin/Nodus
 
 # Verify installation
-podux --version
+Nodus --version
 ```
 
 ### Windows
@@ -50,7 +50,7 @@ Extract the `.zip` file to any directory, then open PowerShell or Command Prompt
 ## Start
 
 ```bash
-podux serve --http 0.0.0.0:8090
+Nodus serve --http 0.0.0.0:8090
 ```
 
 After starting, visit `http://localhost:8090` for the main interface and `http://localhost:8090/_/` for the admin panel.
@@ -61,34 +61,34 @@ On first launch, the database is initialized automatically. Data is stored in a 
 
 ## Auto-start on Boot (Linux)
 
-Use systemd to manage the Podux process.
+Use systemd to manage the Nodus process.
 
 **1. Create a dedicated user (optional but recommended)**
 
 ```bash
-sudo useradd -r -s /bin/false podux
+sudo useradd -r -s /bin/false Nodus
 ```
 
 **2. Create the data directory**
 
 ```bash
-sudo mkdir -p /var/lib/podux
-sudo chown podux:podux /var/lib/podux
+sudo mkdir -p /var/lib/Nodus
+sudo chown Nodus:Nodus /var/lib/Nodus
 ```
 
 **3. Create the systemd service file**
 
 ```bash
-sudo tee /etc/systemd/system/podux.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/Nodus.service > /dev/null <<EOF
 [Unit]
-Description=Podux Service
+Description=Nodus Service
 After=network.target
 
 [Service]
 Type=simple
-User=podux
-WorkingDirectory=/var/lib/podux
-ExecStart=/usr/local/bin/podux serve --http 0.0.0.0:8090
+User=Nodus
+WorkingDirectory=/var/lib/Nodus
+ExecStart=/usr/local/bin/Nodus serve --http 0.0.0.0:8090
 Restart=on-failure
 RestartSec=5s
 
@@ -101,17 +101,17 @@ EOF
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable podux
-sudo systemctl start podux
+sudo systemctl enable Nodus
+sudo systemctl start Nodus
 
 # Check status
-sudo systemctl status podux
+sudo systemctl status Nodus
 ```
 
 ## View Logs
 
 ```bash
-sudo journalctl -u podux -f
+sudo journalctl -u Nodus -f
 ```
 
 ## Next Steps

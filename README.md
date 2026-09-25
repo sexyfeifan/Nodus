@@ -11,30 +11,30 @@
   <b>English</b> | <a href="README_zh.md">简体中文</a>
 </div>
 
-> **Project Renamed:** This project was previously known as **frpc-hub** and has been officially renamed to **Podux**.
+> **Project Renamed:** This project was previously known as **frpc-hub** and has been officially renamed to **Nodus**.
 > The repository URL and all references have been updated accordingly.
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/luckjiawei/podux">
+  <a href="https://github.com/luckjiawei/Nodus">
     <img src="site/src/assets/logo.png" alt="Logo" width="140">
   </a>
 
-<h3 align="center">Podux</h3>
+<h3 align="center">Nodus</h3>
 
   <p align="center">
-    <strong>Podux</strong> is the web UI frpc always needed.
+    <strong>Nodus</strong> is the web UI frpc always needed.
     <br />
     Manage all your clients, proxies, and connections from one place. No terminal. No config editing.
     <br /><br />
-    <a href="https://podux.io/en/guide/getting-started.html"><strong>🚀 Quick Start</strong></a>
+    <a href="https://Nodus.io/en/guide/getting-started.html"><strong>🚀 Quick Start</strong></a>
     &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://podux.io/"><strong>📖 Documentation</strong></a>
+    <a href="https://Nodus.io/"><strong>📖 Documentation</strong></a>
     &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/luckjiawei/podux/issues">🐛 Report Bug</a>
+    <a href="https://github.com/luckjiawei/Nodus/issues">🐛 Report Bug</a>
     &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/luckjiawei/podux/issues">✨ Request Feature</a>
+    <a href="https://github.com/luckjiawei/Nodus/issues">✨ Request Feature</a>
   </p>
 
   <br />
@@ -71,15 +71,15 @@
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=luckjiawei/podux&type=Date)](https://www.star-history.com/#luckjiawei/podux&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=luckjiawei/Nodus&type=Date)](https://www.star-history.com/#luckjiawei/Nodus&Date)
 
 <!-- MARKDOWN LINKS & IMAGES -->
 
-[forks-shield]: https://img.shields.io/github/forks/luckjiawei/podux.svg?style=for-the-badge
-[forks-url]: https://github.com/luckjiawei/podux/network/members
-[stars-shield]: https://img.shields.io/github/stars/luckjiawei/podux.svg?style=for-the-badge
-[stars-url]: https://github.com/luckjiawei/podux/stargazers
-[issues-shield]: https://img.shields.io/github/issues/luckjiawei/podux.svg?style=for-the-badge
-[issues-url]: https://github.com/luckjiawei/podux/issues
-[license-shield]: https://img.shields.io/github/license/luckjiawei/podux.svg?style=for-the-badge
-[license-url]: https://github.com/luckjiawei/podux/blob/main/LICENSE
+[forks-shield]: https://img.shields.io/github/forks/luckjiawei/Nodus.svg?style=for-the-badge
+[forks-url]: https://github.com/luckjiawei/Nodus/network/members
+[stars-shield]: https://img.shields.io/github/stars/luckjiawei/Nodus.svg?style=for-the-badge
+[stars-url]: https://github.com/luckjiawei/Nodus/stargazers
+[issues-shield]: https://img.shields.io/github/issues/luckjiawei/Nodus.svg?style=for-the-badge
+[issues-url]: https://github.com/luckjiawei/Nodus/issues
+[license-shield]: https://img.shields.io/github/license/luckjiawei/Nodus.svg?style=for-the-badge
+[license-url]: https://github.com/luckjiawei/Nodus/blob/main/LICENSE

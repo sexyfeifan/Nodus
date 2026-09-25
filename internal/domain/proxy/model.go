@@ -1,6 +1,6 @@
 package proxy
 
-import "podux/pkg/types"
+import "Nodus/pkg/types"
 
 // Proxy represents a frpc proxy configuration record.
 type Proxy struct {

@@ -1,7 +1,7 @@
 package httphandler
 
 import (
-	"podux/internal/application/system"
+	"Nodus/internal/application/system"
 	"net/http"
 
 	"github.com/pocketbase/pocketbase/core"

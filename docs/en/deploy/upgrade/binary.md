@@ -4,7 +4,7 @@
 This page is still being improved. Some details may not be fully accurate — please refer to the actual behavior when in doubt.
 :::
 
-Before upgrading the Podux binary, back up your data first, then replace the executable.
+Before upgrading the Nodus binary, back up your data first, then replace the executable.
 
 ## Upgrade Steps
 
@@ -13,44 +13,44 @@ Before upgrading the Podux binary, back up your data first, then replace the exe
 Data is stored in `pb_data/` under the working directory. Back it up before upgrading:
 
 ```bash
-cp -r /var/lib/podux/pb_data /var/lib/podux/pb_data.bak
+cp -r /var/lib/Nodus/pb_data /var/lib/Nodus/pb_data.bak
 ```
 
 ### 2. Stop the Service
 
 ```bash
-sudo systemctl stop podux
+sudo systemctl stop Nodus
 ```
 
 If not using systemd, kill the process manually:
 
 ```bash
-pkill podux
+pkill Nodus
 ```
 
 ### 3. Download the New Version
 
-Visit [GitHub Releases](https://github.com/luckjiawei/podux/releases/latest) for the latest version, or download via command line (Linux amd64 example):
+Visit [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) for the latest version, or download via command line (Linux amd64 example):
 
 ```bash
-curl -LO https://github.com/luckjiawei/podux/releases/latest/download/podux-linux-amd64.tar.gz
-tar -xzf podux-linux-amd64.tar.gz
+curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
+tar -xzf Nodus-linux-amd64.tar.gz
 ```
 
 ### 4. Replace the Binary
 
 ```bash
-sudo mv podux /usr/local/bin/podux
-sudo chmod +x /usr/local/bin/podux
+sudo mv Nodus /usr/local/bin/Nodus
+sudo chmod +x /usr/local/bin/Nodus
 ```
 
 ### 5. Restart the Service
 
 ```bash
-sudo systemctl start podux
+sudo systemctl start Nodus
 
 # Confirm service is running
-sudo systemctl status podux
+sudo systemctl status Nodus
 ```
 
 ## Rollback
@@ -59,12 +59,12 @@ If issues occur after upgrading, restore the backup and reinstall the old versio
 
 ```bash
 # Stop service
-sudo systemctl stop podux
+sudo systemctl stop Nodus
 
 # Restore data backup
-rm -rf /var/lib/podux/pb_data
-cp -r /var/lib/podux/pb_data.bak /var/lib/podux/pb_data
+rm -rf /var/lib/Nodus/pb_data
+cp -r /var/lib/Nodus/pb_data.bak /var/lib/Nodus/pb_data
 
 # Download the old version from GitHub Releases, replace the binary, then start
-sudo systemctl start podux
+sudo systemctl start Nodus
 ```

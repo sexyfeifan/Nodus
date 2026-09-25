@@ -1,8 +1,8 @@
-# Podux Agent Development Guide
+# Nodus Agent Development Guide
 
 ## Project Scope and Technology Stack
 
-Podux is a web management platform for centrally managing frpc server configurations, proxies, connection status, network latency, and runtime logs. The current codebase uses Go 1.25.5, PocketBase 0.35.0, and embedded frp 0.68.0. The application frontend is under `site/` and uses React 19, TypeScript 5.9, Vite 7, Radix Themes 3, and Tailwind CSS 4. `docs/` is a VitePress 1 documentation site; its Vue dependency does not mean that the application frontend uses Vue.
+Nodus is a web management platform for centrally managing frpc server configurations, proxies, connection status, network latency, and runtime logs. The current codebase uses Go 1.25.5, PocketBase 0.35.0, and embedded frp 0.68.0. The application frontend is under `site/` and uses React 19, TypeScript 5.9, Vite 7, Radix Themes 3, and Tailwind CSS 4. `docs/` is a VitePress 1 documentation site; its Vue dependency does not mean that the application frontend uses Vue.
 
 Treat `go.mod`, `site/package.json`, and `docs/package.json` as the sources of truth for versions and dependencies. Do not infer versions from documentation examples.
 

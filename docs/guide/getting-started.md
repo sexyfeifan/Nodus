@@ -1,26 +1,26 @@
 # 快速开始
 
-本指南帮助你在 5 分钟内通过 Docker 完成 Podux 的安装和初始配置。
+本指南帮助你在 5 分钟内通过 Docker 完成 Nodus 的安装和初始配置。
 
 ## 前置条件
 
 - 已安装 [Docker](https://docs.docker.com/get-docker/)
 - 一台已部署 frps 的公网服务器（或使用第三方 frp 服务）
-- 运行 Podux 的机器能够访问公网
+- 运行 Nodus 的机器能够访问公网
 
 ::: info 还没有公网服务器？
-推荐使用 **[雨云](https://www.rainyun.com/s=ljw_?podux)** —— 价格实惠、稳定可靠的国内云服务器，适合部署 frps 和各类自托管服务。
+推荐使用 **[雨云](https://www.rainyun.com/s=ljw_?Nodus)** —— 价格实惠、稳定可靠的国内云服务器，适合部署 frps 和各类自托管服务。
 :::
 
 ## 第一步：启动容器
 
 ```bash
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 8090:8090 \
-  -v podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest
+  -v Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest
 ```
 
 启动成功后，终端会输出类似以下内容：
@@ -35,17 +35,17 @@ Admin: http://0.0.0.0:8090/_/
 
 ```yaml
 services:
-  podux:
-    image: ghcr.io/luckjiawei/podux:latest
-    container_name: podux
+  Nodus:
+    image: ghcr.io/luckjiawei/Nodus:latest
+    container_name: Nodus
     restart: unless-stopped
     ports:
       - "8090:8090"
     volumes:
-      - podux-data:/app/pb_data
+      - Nodus-data:/app/pb_data
 
 volumes:
-  podux-data:
+  Nodus-data:
 ```
 
 ```bash
@@ -74,7 +74,7 @@ http://localhost:8090/_/
 首次访问时，系统会引导你创建后台账号，填写邮箱和密码后提交即可。
 
 ::: warning 安全提示
-如果 Podux 运行在公网可访问的服务器上，请务必设置强密码，并考虑通过防火墙限制 `8090` 端口的访问来源。
+如果 Nodus 运行在公网可访问的服务器上，请务必设置强密码，并考虑通过防火墙限制 `8090` 端口的访问来源。
 :::
 
 ## 第四步：进入主界面
@@ -85,7 +85,7 @@ http://localhost:8090/_/
 http://localhost:8090
 ```
 
-你将看到 Podux 的主控制台。
+你将看到 Nodus 的主控制台。
 
 ## 第五步：添加服务器
 
@@ -99,7 +99,7 @@ http://localhost:8090
    | 服务器端口 | frps 监听端口，默认 `7000` | `7000` |
    | 认证令牌 | frps 配置的 `auth.token` | `your-token` |
 
-3. 开启 **自动连接** 后保存，Podux 会立即尝试连接。
+3. 开启 **自动连接** 后保存，Nodus 会立即尝试连接。
 
 连接成功后，服务器卡片将显示 **在线** 状态和当前网络延迟。
 
@@ -119,6 +119,6 @@ http://localhost:8090
    | 本地端口 | `22` |
    | 远程端口 | `6022` |
 
-3. 保存后，Podux 会自动热重载 frpc 配置，无需重启。
+3. 保存后，Nodus 会自动热重载 frpc 配置，无需重启。
 
 之后即可通过 `ssh -p 6022 user@your-server.com` 访问本机。

@@ -1,7 +1,7 @@
 package persistence
 
 import (
-	"podux/internal/domain/proxy"
+	"Nodus/internal/domain/proxy"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"

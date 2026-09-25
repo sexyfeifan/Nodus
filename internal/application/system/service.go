@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"podux/pkg/buildinfo"
+	"Nodus/pkg/buildinfo"
 
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -169,15 +169,15 @@ type LatestVersionResponse struct {
 	Body    string `json:"body"`
 }
 
-// GetLatestVersion fetches the latest podux release from GitHub.
+// GetLatestVersion fetches the latest Nodus release from GitHub.
 func (s *Service) GetLatestVersion() (*LatestVersionResponse, error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 
-	req, err := http.NewRequest("GET", "https://ghp.podux.io/repos/luckjiawei/podux/releases/latest", nil)
+	req, err := http.NewRequest("GET", "https://ghp.Nodus.io/repos/luckjiawei/Nodus/releases/latest", nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "podux-server/"+buildinfo.AppVersion)
+	req.Header.Set("User-Agent", "Nodus-server/"+buildinfo.AppVersion)
 	req.Header.Set("Accept", "application/vnd.github+json")
 
 	resp, err := client.Do(req)

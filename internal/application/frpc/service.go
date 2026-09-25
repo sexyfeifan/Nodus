@@ -16,9 +16,9 @@ import (
 	"syscall"
 	"time"
 
-	proxydomain "podux/internal/domain/proxy"
-	serverdomain "podux/internal/domain/server"
-	"podux/pkg/utils"
+	proxydomain "Nodus/internal/domain/proxy"
+	serverdomain "Nodus/internal/domain/server"
+	"Nodus/pkg/utils"
 
 	"github.com/fatedier/frp/client"
 	frpcsource "github.com/fatedier/frp/pkg/config/source"

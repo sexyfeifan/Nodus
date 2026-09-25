@@ -1,7 +1,7 @@
 package monitoring
 
 import (
-	"podux/pkg/utils"
+	"Nodus/pkg/utils"
 	"sync"
 	"time"
 

@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"podux/internal/application/monitoring"
-	"podux/pkg/response"
+	"Nodus/internal/application/monitoring"
+	"Nodus/pkg/response"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"

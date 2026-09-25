@@ -1,26 +1,26 @@
 # Getting Started
 
-This guide helps you install and configure Podux in under 5 minutes using Docker.
+This guide helps you install and configure Nodus in under 5 minutes using Docker.
 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed
 - A public server with frps deployed (or a third-party frp service)
-- The machine running Podux must have internet access
+- The machine running Nodus must have internet access
 
 ::: info Don't have a public server yet?
-Check out **[RainYun](https://www.rainyun.com/s=ljw_?podux)** — an affordable and reliable cloud server provider, great for hosting frps and other self-hosted services.
+Check out **[RainYun](https://www.rainyun.com/s=ljw_?Nodus)** — an affordable and reliable cloud server provider, great for hosting frps and other self-hosted services.
 :::
 
 ## Step 1: Start the Container
 
 ```bash
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 8090:8090 \
-  -v podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest
+  -v Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest
 ```
 
 On successful startup, the terminal will display:
@@ -35,17 +35,17 @@ You can also manage it with Docker Compose:
 
 ```yaml
 services:
-  podux:
-    image: ghcr.io/luckjiawei/podux:latest
-    container_name: podux
+  Nodus:
+    image: ghcr.io/luckjiawei/Nodus:latest
+    container_name: Nodus
     restart: unless-stopped
     ports:
       - "8090:8090"
     volumes:
-      - podux-data:/app/pb_data
+      - Nodus-data:/app/pb_data
 
 volumes:
-  podux-data:
+  Nodus-data:
 ```
 
 ```bash
@@ -74,7 +74,7 @@ http://localhost:8090/_/
 On the first visit, you will be guided to create a backend account. Enter your email and password and submit.
 
 ::: warning Security Notice
-If Podux is accessible from the public internet, use a strong password and consider restricting access to port `8090` via your firewall.
+If Nodus is accessible from the public internet, use a strong password and consider restricting access to port `8090` via your firewall.
 :::
 
 ## Step 4: Open the Main Interface
@@ -85,7 +85,7 @@ Visit the application dashboard:
 http://localhost:8090
 ```
 
-You will see the Podux main console.
+You will see the Nodus main console.
 
 ## Step 5: Add a Server
 
@@ -99,7 +99,7 @@ You will see the Podux main console.
    | Server Port | frps listening port, default `7000` | `7000` |
    | Auth Token | The `auth.token` from your frps config | `your-token` |
 
-3. Enable **Auto Connect** and save — Podux will connect immediately.
+3. Enable **Auto Connect** and save — Nodus will connect immediately.
 
 Once connected, the server card will show an **Online** status and current latency.
 
@@ -119,6 +119,6 @@ Once connected, the server card will show an **Online** status and current laten
    | Local Port | `22` |
    | Remote Port | `6022` |
 
-3. Save — Podux will automatically hot-reload the frpc config, no restart needed.
+3. Save — Nodus will automatically hot-reload the frpc config, no restart needed.
 
 You can then connect via `ssh -p 6022 user@your-server.com`.

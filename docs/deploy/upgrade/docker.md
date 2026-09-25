@@ -1,6 +1,6 @@
 # Docker 升级
 
-升级 Docker 部署的 Podux，只需拉取新镜像并重建容器，数据通过挂载 volume 自动保留。
+升级 Docker 部署的 Nodus，只需拉取新镜像并重建容器，数据通过挂载 volume 自动保留。
 
 ## Docker Compose 升级（推荐）
 
@@ -25,19 +25,19 @@ docker image prune -f
 
 ```bash
 # 拉取最新镜像
-docker pull ghcr.io/luckjiawei/podux:latest
+docker pull ghcr.io/luckjiawei/Nodus:latest
 
 # 停止并删除旧容器（数据存储在 volume 中，不会丢失）
-docker stop podux
-docker rm podux
+docker stop Nodus
+docker rm Nodus
 
 # 启动新容器
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 8090:8090 \
-  -v ./podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest
+  -v ./Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest
 ```
 
 ## 升级到指定版本
@@ -49,7 +49,7 @@ docker run -d \
 VERSION=v1.2.0 docker compose up -d
 
 # 或编辑 docker-compose.yml 中的 image 字段
-image: ghcr.io/luckjiawei/podux:v1.2.0
+image: ghcr.io/luckjiawei/Nodus:v1.2.0
 ```
 
 ## 回滚
@@ -65,5 +65,5 @@ VERSION=v1.1.0 docker compose up -d
 ```
 
 ::: tip
-数据存储在 volume `podux-data` 中，回滚容器不影响已有数据。
+数据存储在 volume `Nodus-data` 中，回滚容器不影响已有数据。
 :::

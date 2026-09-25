@@ -3,22 +3,22 @@
 layout: home
 
 hero:
-  name: "Podux"
+  name: "Nodus"
   text: "现代化的 Frpc 管理平台"
   tagline: 一站式内网穿透服务管理平台，让 frpc 配置和监控变得简单高效
   image:
     src: /logo.svg
-    alt: Podux Dashboard
+    alt: Nodus Dashboard
   actions:
     - theme: brand
-      text: 什么是 Podux?
-      link: /guide/what-is-podux
+      text: 什么是 Nodus?
+      link: /guide/what-is-Nodus
     - theme: alt
       text: 快速开始
       link: /guide/getting-started
     - theme: alt
       text: GitHub
-      link: https://github.com/luckjiawei/podux
+      link: https://github.com/luckjiawei/Nodus
 
 features:
   - icon: 🖥️

@@ -1,6 +1,6 @@
 # Docker Installation
 
-Deploy Podux with Docker — ideal for containerized environments or quick isolated deployments.
+Deploy Nodus with Docker — ideal for containerized environments or quick isolated deployments.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Deploy Podux with Docker — ideal for containerized environments or quick isola
 The official image is hosted on GitHub Container Registry:
 
 ```text
-ghcr.io/luckjiawei/podux:latest
+ghcr.io/luckjiawei/Nodus:latest
 ```
 
 Supported architectures: `linux/amd64`, `linux/arm64`, `linux/arm/v7`
@@ -21,17 +21,17 @@ Supported architectures: `linux/amd64`, `linux/arm64`, `linux/arm/v7`
 
 ```bash
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 8090:8090 \
-  -v ./podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest
+  -v ./Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest
 ```
 
 | Flag | Description |
 | --- | --- |
 | `-p 8090:8090` | Map container port to host |
-| `-v ./podux-data:/app/pb_data` | Persist data directory |
+| `-v ./Nodus-data:/app/pb_data` | Persist data directory |
 | `--restart unless-stopped` | Auto-recover after host reboot |
 
 After starting, visit `http://localhost:8090`.
@@ -44,16 +44,16 @@ Create a `docker-compose.yml` file:
 version: '3.8'
 
 services:
-  podux:
-    image: ghcr.io/luckjiawei/podux:${VERSION:-latest}
-    container_name: podux
+  Nodus:
+    image: ghcr.io/luckjiawei/Nodus:${VERSION:-latest}
+    container_name: Nodus
     restart: unless-stopped
 
     ports:
       - "8090:8090"
 
     volumes:
-      - podux-data:/app/pb_data
+      - Nodus-data:/app/pb_data
 
     environment:
       - TZ=Asia/Shanghai
@@ -87,12 +87,12 @@ services:
       retries: 3
 
 volumes:
-  podux-data:
+  Nodus-data:
     driver: local
 
 networks:
   default:
-    name: podux-network
+    name: Nodus-network
 ```
 
 Start:
@@ -104,18 +104,18 @@ docker compose up -d
 View logs:
 
 ```bash
-docker compose logs -f podux
+docker compose logs -f Nodus
 ```
 
 ## Data Persistence
 
 Container data is stored in `/app/pb_data`, which includes the database and configuration. **This directory must be mounted**, otherwise data will be lost when the container is recreated.
 
-Docker Compose uses a named volume `podux-data` managed by Docker:
+Docker Compose uses a named volume `Nodus-data` managed by Docker:
 
 ```bash
 # Inspect volume location
-docker volume inspect podux-data
+docker volume inspect Nodus-data
 ```
 
 ## Custom Port
@@ -124,11 +124,11 @@ To change the listening port, update both the host mapping and the container por
 
 ```bash
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 18090:18090 \
-  -v ./podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest \
+  -v ./Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest \
   serve --http 0.0.0.0:18090
 ```
 
@@ -136,16 +136,16 @@ docker run -d \
 
 ```bash
 # Stop
-docker compose stop podux
+docker compose stop Nodus
 
 # Restart
-docker compose restart podux
+docker compose restart Nodus
 
 # View logs
-docker compose logs -f podux
+docker compose logs -f Nodus
 
 # Enter container shell
-docker compose exec podux sh
+docker compose exec Nodus sh
 ```
 
 ## Next Steps

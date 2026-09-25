@@ -1,10 +1,10 @@
 package dashboard
 
 import (
-	proxyapp "podux/internal/application/proxy"
-	serverapp "podux/internal/application/server"
-	proxydomain "podux/internal/domain/proxy"
-	serverdomain "podux/internal/domain/server"
+	proxyapp "Nodus/internal/application/proxy"
+	serverapp "Nodus/internal/application/server"
+	proxydomain "Nodus/internal/domain/proxy"
+	serverdomain "Nodus/internal/domain/server"
 	"time"
 
 	"github.com/pocketbase/pocketbase/core"

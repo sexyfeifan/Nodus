@@ -1,22 +1,22 @@
-# What is Podux?
+# What is Nodus?
 
-Podux is a **modern frpc management platform** built on PocketBase and React, providing a visual interface to manage intranet penetration services.
+Nodus is a **modern frpc management platform** built on PocketBase and React, providing a visual interface to manage intranet penetration services.
 
 ## Dashboard
 
-![Podux Dashboard](/11.png)
+![Nodus Dashboard](/11.png)
 
 ## The Name
 
-**Podux** = **proxy** + **port** + **dux** (Latin: leader, guide)
+**Nodus** = **proxy** + **port** + **dux** (Latin: leader, guide)
 
 The name itself is a statement of intent: not just a frontend for one tool, but a unified platform to lead and guide your tunneling infrastructure.
 
 ## Why the Rename?
 
-Podux started life as **frpc-hub** — a project built around frpc. As it grew, the vision became clear: support not just frp, but become a unified platform for managing multiple tunneling tools.
+Nodus started life as **frpc-hub** — a project built around frpc. As it grew, the vision became clear: support not just frp, but become a unified platform for managing multiple tunneling tools.
 
-The name **frpc-hub** tied the project to a single tool and couldn't carry that larger ambition. **Podux** reflects where the project is headed — a single, forward-looking platform that can grow to support more protocols and tools beyond frp.
+The name **frpc-hub** tied the project to a single tool and couldn't carry that larger ambition. **Nodus** reflects where the project is headed — a single, forward-looking platform that can grow to support more protocols and tools beyond frp.
 
 > The rename happened in March 2026. The repository and all related references have been updated accordingly.
 
@@ -31,7 +31,7 @@ However, using native frpc comes with several pain points:
 - **No visual monitoring**: No intuitive way to view connection status or latency
 - **High operational cost**: Upgrades, backups, and migrations are all manual
 
-Podux was built to solve exactly these problems.
+Nodus was built to solve exactly these problems.
 
 ## Core Features
 
@@ -59,7 +59,7 @@ Create and manage proxy tunnels via visual forms. Supported proxy types:
 
 ### Hot Reload
 
-After modifying proxy configurations, Podux automatically triggers an frpc reload — **no manual restart required**, zero service interruption.
+After modifying proxy configurations, Nodus automatically triggers an frpc reload — **no manual restart required**, zero service interruption.
 
 ### Modern Interface
 
@@ -89,11 +89,11 @@ Built with Radix UI and Tailwind CSS, delivering a clean and elegant UI with Chi
 └─────────────────────────────────┘
 ```
 
-Podux ships as a **single executable** that embeds both the PocketBase backend and frontend assets — ready to run with zero extra dependencies.
+Nodus ships as a **single executable** that embeds both the PocketBase backend and frontend assets — ready to run with zero extra dependencies.
 
 ## Comparison with Manual Management
 
-| | Manual frpc | Podux |
+| | Manual frpc | Nodus |
 | --- | --- | --- |
 | Configuration | Edit `.toml` files | Visual forms |
 | Reload config | Restart process manually | Automatic hot reload |

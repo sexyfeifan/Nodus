@@ -3,7 +3,7 @@ package monitoring
 import (
 	"encoding/json"
 	"fmt"
-	"podux/pkg/utils"
+	"Nodus/pkg/utils"
 	"time"
 
 	"github.com/pocketbase/dbx"

@@ -1,6 +1,6 @@
 # Docker Upgrade
 
-To upgrade a Docker-deployed Podux, pull the new image and recreate the container. Data in the mounted volume is preserved automatically.
+To upgrade a Docker-deployed Nodus, pull the new image and recreate the container. Data in the mounted volume is preserved automatically.
 
 ## Docker Compose Upgrade (Recommended)
 
@@ -25,19 +25,19 @@ docker image prune -f
 
 ```bash
 # Pull the latest image
-docker pull ghcr.io/luckjiawei/podux:latest
+docker pull ghcr.io/luckjiawei/Nodus:latest
 
 # Stop and remove the old container (data in volume is preserved)
-docker stop podux
-docker rm podux
+docker stop Nodus
+docker rm Nodus
 
 # Start a new container
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 8090:8090 \
-  -v ./podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest
+  -v ./Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest
 ```
 
 ## Upgrade to a Specific Version
@@ -49,7 +49,7 @@ To target a specific version instead of `latest`, set the image tag:
 VERSION=v1.2.0 docker compose up -d
 
 # Or edit the image field in docker-compose.yml
-image: ghcr.io/luckjiawei/podux:v1.2.0
+image: ghcr.io/luckjiawei/Nodus:v1.2.0
 ```
 
 ## Rollback
@@ -65,5 +65,5 @@ VERSION=v1.1.0 docker compose up -d
 ```
 
 ::: tip
-Data is stored in the `podux-data` volume. Rolling back the container does not affect existing data.
+Data is stored in the `Nodus-data` volume. Rolling back the container does not affect existing data.
 :::

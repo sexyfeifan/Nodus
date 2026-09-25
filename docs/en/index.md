@@ -2,22 +2,22 @@
 layout: home
 
 hero:
-  name: "Podux"
+  name: "Nodus"
   text: "Modern Frpc Management Platform"
   tagline: One-stop intranet penetration service management platform, making frpc configuration and monitoring simple and efficient.
   image:
     src: /logo.svg
-    alt: Podux Dashboard
+    alt: Nodus Dashboard
   actions:
     - theme: brand
-      text: What is Podux?
-      link: /en/guide/what-is-podux
+      text: What is Nodus?
+      link: /en/guide/what-is-Nodus
     - theme: alt
       text: Get Started
       link: /en/guide/getting-started
     - theme: alt
       text: GitHub
-      link: https://github.com/luckjiawei/podux
+      link: https://github.com/luckjiawei/Nodus
 
 features:
   - icon: 🖥️

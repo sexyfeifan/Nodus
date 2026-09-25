@@ -4,25 +4,25 @@
 本页内容正在持续完善中，部分细节可能不够准确，请以实际情况为准。
 :::
 
-通过预编译的二进制文件安装 Podux，适合直接在服务器或本地机器上运行。
+通过预编译的二进制文件安装 Nodus，适合直接在服务器或本地机器上运行。
 
 ## 下载
 
-前往 [GitHub Releases](https://github.com/luckjiawei/podux/releases/latest) 页面，根据你的系统选择对应的安装包：
+前往 [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) 页面，根据你的系统选择对应的安装包：
 
 | 系统 | 架构 | 文件名 |
 | --- | --- | --- |
-| Linux | x86_64 (amd64) | `podux-linux-amd64.tar.gz` |
-| Linux | ARM64 | `podux-linux-arm64.tar.gz` |
-| Linux | ARMv7 | `podux-linux-armv7.tar.gz` |
-| macOS | Intel | `podux-darwin-amd64.tar.gz` |
-| macOS | Apple Silicon | `podux-darwin-arm64.tar.gz` |
-| Windows | x86_64 | `podux-windows-amd64.zip` |
+| Linux | x86_64 (amd64) | `Nodus-linux-amd64.tar.gz` |
+| Linux | ARM64 | `Nodus-linux-arm64.tar.gz` |
+| Linux | ARMv7 | `Nodus-linux-armv7.tar.gz` |
+| macOS | Intel | `Nodus-darwin-amd64.tar.gz` |
+| macOS | Apple Silicon | `Nodus-darwin-arm64.tar.gz` |
+| Windows | x86_64 | `Nodus-windows-amd64.zip` |
 
 也可以通过命令行直接下载（以 Linux amd64 为例）：
 
 ```bash
-curl -LO https://github.com/luckjiawei/podux/releases/latest/download/podux-linux-amd64.tar.gz
+curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
 ```
 
 ## 安装
@@ -31,13 +31,13 @@ curl -LO https://github.com/luckjiawei/podux/releases/latest/download/podux-linu
 
 ```bash
 # 解压
-tar -xzf podux-linux-amd64.tar.gz
+tar -xzf Nodus-linux-amd64.tar.gz
 
 # 移动到系统路径（可选）
-sudo mv podux /usr/local/bin/
+sudo mv Nodus /usr/local/bin/
 
 # 赋予执行权限
-sudo chmod +x /usr/local/bin/podux
+sudo chmod +x /usr/local/bin/Nodus
 ```
 
 ### Windows
@@ -47,7 +47,7 @@ sudo chmod +x /usr/local/bin/podux
 ## 启动
 
 ```bash
-podux serve --http 0.0.0.0:8090
+Nodus serve --http 0.0.0.0:8090
 ```
 
 启动后访问 `http://localhost:8090` 进入主界面，`http://localhost:8090/_/` 进入管理后台。
@@ -58,34 +58,34 @@ podux serve --http 0.0.0.0:8090
 
 ## 配置开机自启（Linux）
 
-推荐使用 systemd 管理 Podux 进程。
+推荐使用 systemd 管理 Nodus 进程。
 
 **1. 创建专用用户（可选但推荐）**
 
 ```bash
-sudo useradd -r -s /bin/false podux
+sudo useradd -r -s /bin/false Nodus
 ```
 
 **2. 创建数据目录**
 
 ```bash
-sudo mkdir -p /var/lib/podux
-sudo chown podux:podux /var/lib/podux
+sudo mkdir -p /var/lib/Nodus
+sudo chown Nodus:Nodus /var/lib/Nodus
 ```
 
 **3. 创建 systemd 服务文件**
 
 ```bash
-sudo tee /etc/systemd/system/podux.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/Nodus.service > /dev/null <<EOF
 [Unit]
-Description=Podux Service
+Description=Nodus Service
 After=network.target
 
 [Service]
 Type=simple
-User=podux
-WorkingDirectory=/var/lib/podux
-ExecStart=/usr/local/bin/podux serve --http 0.0.0.0:8090
+User=Nodus
+WorkingDirectory=/var/lib/Nodus
+ExecStart=/usr/local/bin/Nodus serve --http 0.0.0.0:8090
 Restart=on-failure
 RestartSec=5s
 
@@ -98,15 +98,15 @@ EOF
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable podux
-sudo systemctl start podux
+sudo systemctl enable Nodus
+sudo systemctl start Nodus
 
 # 查看运行状态
-sudo systemctl status podux
+sudo systemctl status Nodus
 ```
 
 ## 查看日志
 
 ```bash
-sudo journalctl -u podux -f
+sudo journalctl -u Nodus -f
 ```

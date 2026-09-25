@@ -1,7 +1,7 @@
 package persistence
 
 import (
-	"podux/internal/domain/server"
+	"Nodus/internal/domain/server"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"

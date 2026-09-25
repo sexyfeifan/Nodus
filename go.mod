@@ -1,4 +1,4 @@
-module podux
+module Nodus
 
 go 1.25.5
 

@@ -1,6 +1,6 @@
 # Docker 安装
 
-使用 Docker 部署 Podux，适合容器化环境或希望快速隔离部署的场景。
+使用 Docker 部署 Nodus，适合容器化环境或希望快速隔离部署的场景。
 
 ## 前置条件
 
@@ -12,7 +12,7 @@
 官方镜像托管在 GitHub Container Registry：
 
 ```text
-ghcr.io/luckjiawei/podux:latest
+ghcr.io/luckjiawei/Nodus:latest
 ```
 
 支持以下架构：`linux/amd64`、`linux/arm64`、`linux/arm/v7`
@@ -21,17 +21,17 @@ ghcr.io/luckjiawei/podux:latest
 
 ```bash
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 8090:8090 \
-  -v ./podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest
+  -v ./Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest
 ```
 
 | 参数 | 说明 |
 | --- | --- |
 | `-p 8090:8090` | 将容器端口映射到宿主机 |
-| `-v ./podux-data:/app/pb_data` | 持久化数据目录 |
+| `-v ./Nodus-data:/app/pb_data` | 持久化数据目录 |
 | `--restart unless-stopped` | 宿主机重启后自动恢复 |
 
 启动后访问 `http://localhost:8090` 进入主界面。
@@ -44,16 +44,16 @@ docker run -d \
 version: '3.8'
 
 services:
-  podux:
-    image: ghcr.io/luckjiawei/podux:${VERSION:-latest}
-    container_name: podux
+  Nodus:
+    image: ghcr.io/luckjiawei/Nodus:${VERSION:-latest}
+    container_name: Nodus
     restart: unless-stopped
 
     ports:
       - "8090:8090"
 
     volumes:
-      - podux-data:/app/pb_data
+      - Nodus-data:/app/pb_data
 
     environment:
       - TZ=Asia/Shanghai
@@ -87,12 +87,12 @@ services:
       retries: 3
 
 volumes:
-  podux-data:
+  Nodus-data:
     driver: local
 
 networks:
   default:
-    name: podux-network
+    name: Nodus-network
 ```
 
 启动：
@@ -104,18 +104,18 @@ docker compose up -d
 查看日志：
 
 ```bash
-docker compose logs -f podux
+docker compose logs -f Nodus
 ```
 
 ## 数据持久化
 
 容器内数据存储在 `/app/pb_data`，包含数据库文件和配置信息。**必须挂载此目录**，否则容器重建后数据丢失。
 
-Docker Compose 配置使用具名 volume `podux-data`，数据由 Docker 统一管理：
+Docker Compose 配置使用具名 volume `Nodus-data`，数据由 Docker 统一管理：
 
 ```bash
 # 查看 volume 位置
-docker volume inspect podux-data
+docker volume inspect Nodus-data
 ```
 
 ## 自定义端口
@@ -124,11 +124,11 @@ docker volume inspect podux-data
 
 ```bash
 docker run -d \
-  --name podux \
+  --name Nodus \
   --restart unless-stopped \
   -p 18090:18090 \
-  -v ./podux-data:/app/pb_data \
-  ghcr.io/luckjiawei/podux:latest \
+  -v ./Nodus-data:/app/pb_data \
+  ghcr.io/luckjiawei/Nodus:latest \
   serve --http 0.0.0.0:18090
 ```
 
@@ -136,15 +136,15 @@ docker run -d \
 
 ```bash
 # 停止
-docker compose stop podux
+docker compose stop Nodus
 
 # 重启
-docker compose restart podux
+docker compose restart Nodus
 
 # 查看日志
-docker compose logs -f podux
+docker compose logs -f Nodus
 
 # 进入容器
-docker compose exec podux sh
+docker compose exec Nodus sh
 ```
 

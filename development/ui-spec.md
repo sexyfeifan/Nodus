@@ -12,7 +12,7 @@ The project has no custom token file. It primarily consumes Radix CSS variables 
 
 | Category | Verified values/usage |
 | --- | --- |
-| Brand/accent | Radix indigo mappings `--accent-2/3/4/6/9/10/11` and `--accent-a3`; do not hard-code a new "Podux blue" |
+| Brand/accent | Radix indigo mappings `--accent-2/3/4/6/9/10/11` and `--accent-a3`; do not hard-code a new "Nodus blue" |
 | Neutrals/surfaces | Slate mappings `--gray-1..12`, alpha gray, `--color-background`, and `--color-panel-solid`; main page background is `--gray-2` |
 | Status colors | Radix green/red/amber/orange/blue/purple scales; online dot `--green-9`, offline dot `--red-9`, unknown dot `--gray-9` |
 | Typography | No project font family; inherits Radix/browser. Body text commonly uses `<Text size="1|2|3|4">`, page titles use `<Heading size="6">`, and section titles commonly use size 3/4 |

@@ -87,10 +87,10 @@ export function SetupView({
                     whileHover={{ scale: 1.1, rotate: 10 }}
                     whileTap={{ scale: 0.95 }}
                     src={logo}
-                    alt="Podux Logo"
+                    alt="Nodus Logo"
                     className="h-16 w-16 cursor-pointer rounded-2xl object-contain"
                   />
-                  <Heading size="6">Podux</Heading>
+                  <Heading size="6">Nodus</Heading>
                 </Flex>
               </motion.div>
               <motion.div

@@ -4,22 +4,22 @@ version: '3.8'
 # Usage: docker compose -f docker-compose.build.yml up -d
 
 services:
-  podux:
+  Nodus:
     build:
       context: ..
       dockerfile: Dockerfile
       args:
         VERSION: ${VERSION:-latest}
         BUILD_TIME: ${BUILD_TIME:-$(date -u '+%Y-%m-%d_%H:%M:%S')}
-    image: podux:${VERSION:-latest}
-    container_name: podux
+    image: Nodus:${VERSION:-latest}
+    container_name: Nodus
     restart: unless-stopped
 
     ports:
       - "8090:8090"
 
     volumes:
-      - podux-data:/app/pb_data
+      - Nodus-data:/app/pb_data
 
     environment:
       - TZ=Asia/Shanghai
@@ -53,9 +53,9 @@ services:
       retries: 3
 
 volumes:
-  podux-data:
+  Nodus-data:
     driver: local
 
 networks:
   default:
-    name: podux-network
+    name: Nodus-network

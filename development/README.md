@@ -1,4 +1,4 @@
-# Podux Development Design Documentation
+# Nodus Development Design Documentation
 
 This directory documents the verifiable design of the current `main` baseline and serves as the entry point for future development and agent changes:
 

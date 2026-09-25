@@ -2,7 +2,7 @@
 
 ## Verified Current State
 
-Podux is a single Go/PocketBase service that hosts the API, SQLite persistence, background monitoring, frpc client services, and the React static site. The code calls running instances `processes`, but `internal/application/frpc/service.go` actually creates in-process `frp/client.Service` instances and runs them in goroutines; it does not launch separate `frpc` OS processes.
+Nodus is a single Go/PocketBase service that hosts the API, SQLite persistence, background monitoring, frpc client services, and the React static site. The code calls running instances `processes`, but `internal/application/frpc/service.go` actually creates in-process `frp/client.Service` instances and runs them in goroutines; it does not launch separate `frpc` OS processes.
 
 ```mermaid
 flowchart LR
@@ -72,7 +72,7 @@ Standard server/proxy CRUD primarily uses the PocketBase SDK. Server lists, dash
 flowchart LR
   SRC[site/src React + TypeScript] -->|pnpm run build| DIST[site/dist]
   DIST -->|build/build.sh copy| PUBLIC[pb_public]
-  PUBLIC -->|go:embed all:pb_public| BIN[Podux Go binary]
+  PUBLIC -->|go:embed all:pb_public| BIN[Nodus Go binary]
   BIN -->|apis.Static fallback| WEB[Browser]
 ```
 

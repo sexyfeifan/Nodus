@@ -144,11 +144,11 @@ export function MainLayout({ children }: MainLayoutProps) {
                       whileHover={{ scale: 1.1, rotate: 10 }}
                       whileTap={{ scale: 0.95 }}
                       src={logo}
-                      alt="Podux Logo"
+                      alt="Nodus Logo"
                       className="h-8 w-8 cursor-pointer rounded-2xl object-contain"
                     />
                     <Text size="4" weight="bold">
-                      Podux
+                      Nodus
                     </Text>
                   </Flex>
                 </Link>
@@ -362,7 +362,7 @@ export function MainLayout({ children }: MainLayoutProps) {
               {/* Left: Copyright */}
               <Flex align="center" gap="2">
                 <Text size="1" color="gray">
-                  © 2026 Podux. All rights reserved.
+                  © 2026 Nodus. All rights reserved.
                 </Text>
               </Flex>
 
@@ -418,7 +418,7 @@ export function MainLayout({ children }: MainLayoutProps) {
               {/* Right: Links */}
               <Flex align="center" gap="4">
                 <a
-                  href="https://github.com/luckjiawei/podux"
+                  href="https://github.com/luckjiawei/Nodus"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="no-underline"
@@ -429,7 +429,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                     className="text-gray-500 transition-colors hover:text-gray-700"
                   >
                     <Icon icon="lucide:github" width="16" height="16" />
-                    <Text size="1">Podux</Text>
+                    <Text size="1">Nodus</Text>
                   </Flex>
                 </a>
               </Flex>

@@ -1,7 +1,7 @@
 package server
 
 import (
-	serverdomain "podux/internal/domain/server"
+	serverdomain "Nodus/internal/domain/server"
 
 	"github.com/pocketbase/pocketbase/core"
 )

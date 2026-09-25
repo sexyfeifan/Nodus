@@ -2,8 +2,8 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  // base: '/podux-doc/',
-  title: "Podux",
+  // base: '/Nodus-doc/',
+  title: "Nodus",
   description: "现代化的 Frpc 管理平台 - 基于 PocketBase 和 React 构建的强大内网穿透管理系统",
   head: [
     ['link', { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
@@ -19,13 +19,13 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: '首页', link: '/' },
-          { text: '指南', link: '/guide/what-is-podux' },
+          { text: '指南', link: '/guide/what-is-Nodus' },
         ],
         sidebar: [
           {
             text: '指南',
             items: [
-              { text: '什么是 Podux?', link: '/guide/what-is-podux' },
+              { text: '什么是 Nodus?', link: '/guide/what-is-Nodus' },
                         { text: '界面预览', link: '/guide/screenshots' },
 
               { text: '快速开始', link: '/guide/getting-started' },
@@ -68,7 +68,7 @@ export default defineConfig({
         ],
         footer: {
           message: '基于 MIT 协议开源',
-          copyright: 'Copyright © 2026-present Podux'
+          copyright: 'Copyright © 2026-present Nodus'
         },
       }
     },
@@ -79,13 +79,13 @@ export default defineConfig({
       themeConfig: {
         nav: [
           { text: 'Home', link: '/en/' },
-          { text: 'Guide', link: '/en/guide/what-is-podux' }
+          { text: 'Guide', link: '/en/guide/what-is-Nodus' }
         ],
         sidebar: [
           {
             text: 'Guide',
             items: [
-              { text: 'What is Podux?', link: '/en/guide/what-is-podux' },
+              { text: 'What is Nodus?', link: '/en/guide/what-is-Nodus' },
               { text: 'Screenshots', link: '/en/guide/screenshots' },
               { text: 'Getting Started', link: '/en/guide/getting-started' }
             ]
@@ -118,7 +118,7 @@ export default defineConfig({
         ],
         footer: {
           message: 'Released under the MIT License.',
-          copyright: 'Copyright © 2026-present Podux'
+          copyright: 'Copyright © 2026-present Nodus'
         },
       }
     }
@@ -129,7 +129,7 @@ export default defineConfig({
     logo: { src: '/logo.svg', width: 24, height: 24 },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/luckjiawei/podux' }
+      { icon: 'github', link: 'https://github.com/luckjiawei/Nodus' }
     ],
 
     search: {

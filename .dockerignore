@@ -19,8 +19,8 @@ build/dist/
 dist/
 *.tar.gz
 *.zip
-podux
-podux.exe
+Nodus
+Nodus.exe
 
 # Frontend (built inside Docker)
 site/node_modules/

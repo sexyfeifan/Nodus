@@ -1,6 +1,6 @@
 <template>
   <div class="aside-ad">
-    <a href="https://www.rainyun.com/s=ljw_?podux" target="_blank" rel="noopener noreferrer">
+    <a href="https://www.rainyun.com/s=ljw_?Nodus" target="_blank" rel="noopener noreferrer">
       <div class="aside-ad-inner">
         <div class="aside-ad-badge">赞助商</div>
         <div class="aside-ad-content">

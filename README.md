@@ -9,7 +9,7 @@
   <b>简体中文</b> | <a href="README_en.md">English</a>
 </div>
 
-> **项目说明：** Nodus 前身为 **podux**（更早名为 frpc-hub），现由 [sexyfeifan/Nodus](https://github.com/sexyfeifan/Nodus) 独立维护。数据结构与 podux 兼容，可无损迁移，详见 [迁移指南](docs/guide/migration.md)。
+> **项目说明：** Nodus 由 [sexyfeifan/Nodus](https://github.com/sexyfeifan/Nodus) 独立维护，是一款 frpc 客户端管理面板，支持多节点管理、代理规则配置、状态监控与配置导入。支持从旧版数据无损迁移，详见 [迁移指南](docs/guide/migration.md)。
 
 <br />
 <div align="center">

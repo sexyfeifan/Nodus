@@ -6,20 +6,6 @@ Nodus is a **modern frpc management platform** built on PocketBase and React, pr
 
 ![Nodus Dashboard](/11.png)
 
-## The Name
-
-**Nodus** = **proxy** + **port** + **dux** (Latin: leader, guide)
-
-The name itself is a statement of intent: not just a frontend for one tool, but a unified platform to lead and guide your tunneling infrastructure.
-
-## Why the Rename?
-
-Nodus started life as **frpc-hub** — a project built around frpc. As it grew, the vision became clear: support not just frp, but become a unified platform for managing multiple tunneling tools.
-
-The name **frpc-hub** tied the project to a single tool and couldn't carry that larger ambition. **Nodus** reflects where the project is headed — a single, forward-looking platform that can grow to support more protocols and tools beyond frp.
-
-> The rename happened in March 2026. The repository and all related references have been updated accordingly.
-
 ## Background
 
 [frp](https://github.com/fatedier/frp) is one of the most popular open-source intranet penetration tools. Its client `frpc` establishes tunnels with the server `frps` via configuration files (`.toml` / `.ini`), exposing local services to the public internet.
@@ -54,8 +40,8 @@ Create and manage proxy tunnels via visual forms. Supported proxy types:
 | UDP | UDP traffic forwarding |
 | HTTP | HTTP reverse proxy |
 | HTTPS | HTTPS reverse proxy |
-| STCP | Secure TCP, peer-to-peer encrypted |
-| SUDP | Secure UDP |
+
+> STCP / XTCP are reserved in the UI but not yet available.
 
 ### Hot Reload
 

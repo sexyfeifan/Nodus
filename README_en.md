@@ -9,7 +9,7 @@
   <a href="README.md">简体中文</a> | <b>English</b>
 </div>
 
-> **Note:** Nodus was formerly known as **podux** (and earlier as **frpc-hub**), now maintained independently at [sexyfeifan/Nodus](https://github.com/sexyfeifan/Nodus). The data layout is compatible with podux and can be migrated without loss — see the [Migration Guide](docs/guide/migration.md).
+> **Note:** Nodus is maintained at [sexyfeifan/Nodus](https://github.com/sexyfeifan/Nodus) — a web management panel for frpc with multi-node control, proxy rules, monitoring and config import. Existing data can be migrated without loss — see the [Migration Guide](docs/guide/migration.md).
 
 <br />
 <div align="center">

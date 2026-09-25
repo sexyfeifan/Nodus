@@ -34,9 +34,8 @@ jobs:
         working-directory: site
 
       - name: Type check
-        run: pnpm run tsc --noEmit 2>/dev/null || pnpm exec tsc --noEmit
+        run: pnpm exec tsc --noEmit
         working-directory: site
-        continue-on-error: true
 
       - name: Build
         run: pnpm run build
@@ -74,7 +73,13 @@ jobs:
         run: go vet ./...
 
       - name: go test
-        run: go test ./...
+        run: go test -race ./...
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.7.2
+          args: --timeout=5m
 
       - name: Build (linux/amd64)
         env:

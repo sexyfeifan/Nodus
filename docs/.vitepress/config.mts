@@ -29,6 +29,7 @@ export default defineConfig({
                         { text: '界面预览', link: '/guide/screenshots' },
 
               { text: '快速开始', link: '/guide/getting-started' },
+              { text: '迁移指南', link: '/guide/migration' },
             ]
           },
           {
@@ -87,7 +88,8 @@ export default defineConfig({
             items: [
               { text: 'What is Nodus?', link: '/en/guide/what-is-Nodus' },
               { text: 'Screenshots', link: '/en/guide/screenshots' },
-              { text: 'Getting Started', link: '/en/guide/getting-started' }
+              { text: 'Getting Started', link: '/en/guide/getting-started' },
+              { text: 'Migration', link: '/en/guide/migration' }
             ]
           },
           {

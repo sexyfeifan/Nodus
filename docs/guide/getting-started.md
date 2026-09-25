@@ -1,16 +1,20 @@
 # 快速开始
 
-本指南帮助你在 5 分钟内通过 Docker 完成 Nodus 的安装和初始配置。
+本指南帮助你在 5 分钟内完成 Nodus 的安装和初始配置。
 
 ## 前置条件
 
-- 已安装 [Docker](https://docs.docker.com/get-docker/)
+- 已安装 [Docker](https://docs.docker.com/get-docker/)（或使用二进制部署）
 - 一台已部署 frps 的公网服务器（或使用第三方 frp 服务）
-- 运行 Nodus 的机器能够访问公网
+- 运行 Nodus 的机器能够访问 frps
 
-::: info 还没有公网服务器？
-推荐使用 **[雨云](https://www.rainyun.com/s=ljw_?Nodus)** —— 价格实惠、稳定可靠的国内云服务器，适合部署 frps 和各类自托管服务。
-:::
+## 第零步：一键脚本（可选）
+
+```bash
+bash scripts/setup.sh
+```
+
+脚本会拉取镜像、创建数据卷并启动容器，支持 `PORT`、`IMAGE`、`MODE=docker|binary` 等环境变量。执行完可跳到「第二步：创建账号」。
 
 ## 第一步：启动容器
 

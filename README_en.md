@@ -1,7 +1,5 @@
 <a name="readme-top"></a>
 
-<!-- PROJECT SHIELDS -->
-
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -11,10 +9,8 @@
   <a href="README.md">简体中文</a> | <b>English</b>
 </div>
 
-> **Note:** Nodus was formerly known as **podux** (and earlier as frpc-hub) and is now maintained independently as **Nodus**.
-> The repository URL and all references have been updated accordingly.
+> **Note:** Nodus was formerly known as **podux** (and earlier as **frpc-hub**), now maintained independently at [sexyfeifan/Nodus](https://github.com/sexyfeifan/Nodus). The data layout is compatible with podux and can be migrated without loss — see the [Migration Guide](docs/guide/migration.md).
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/sexyfeifan/Nodus">
@@ -24,50 +20,117 @@
 <h3 align="center">Nodus</h3>
 
   <p align="center">
-    <strong>Nodus</strong> is the web UI frpc always needed.
+    A web management panel for frpc: manage frp clients, tunnel proxy rules and connection status in one place.
     <br />
-    Manage all your clients, proxies, and connections from one place. No terminal. No config editing.
-    <br /><br />
-    <a href="https://github.com/sexyfeifan/Nodus/blob/main/docs/en/guide/getting-started.md"><strong>🚀 Quick Start</strong></a>
-    &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/sexyfeifan/Nodus/tree/main/docs/en"><strong>📖 Documentation</strong></a>
-    &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/sexyfeifan/Nodus/issues">🐛 Report Bug</a>
-    &nbsp;&nbsp;·&nbsp;&nbsp;
-    <a href="https://github.com/sexyfeifan/Nodus/issues">✨ Request Feature</a>
-  </p>
-
-  <br />
-
-  <p align="center">
-    <strong>✅ Multi-server management</strong> &nbsp;·&nbsp;
-    <strong>📊 Real-time dashboard</strong> &nbsp;·&nbsp;
-    <strong>🌐 Network monitoring</strong> &nbsp;·&nbsp;
-    <strong>🚀 One-click auto-start</strong> &nbsp;·&nbsp;
-    <strong>⚡ High performance</strong> &nbsp;·&nbsp;
-    <strong>🐳 Docker ready</strong> &nbsp;·&nbsp;
-    <strong>🎨 Modern UI</strong> &nbsp;·&nbsp;
+    <a href="docs/guide/getting-started.md"><strong>Getting Started</strong></a>
+    &nbsp;·&nbsp;
+    <a href="docs/guide/migration.md"><strong>Migration</strong></a>
+    &nbsp;·&nbsp;
+    <a href="docs"><strong>Docs</strong></a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/sexyfeifan/Nodus/issues">Issues</a>
   </p>
 
 </div>
 
-## Screenshot
-
 ![Screenshot](screenshot/1.png)
 
-## Milestones
+## Features
 
-- 2026-09-25: Released v0.0.1 — first release of Nodus (based on podux v0.1.6)
-- 2026-09-25: Released v0.0.2 — security hardening and comprehensive bug fixes
+What the current codebase actually supports:
 
-## Install
+- **Multi-node management** — add multiple frps servers (frpc client nodes) and start / stop / reload them
+- **Proxy rules** — visual configuration of `tcp` / `udp` / `http` / `https` tunnels (`stcp` / `xtcp` placeholders in the UI)
+- **Status & logs** — node connection status and live frpc log streaming
+- **Network monitoring** — latency probes and server geolocation
+- **Dashboard** — node topology and connection statistics
+- **Auto-start** — nodes marked `autoConnection` start with the service
+- **Config import** — import an existing `frpc.toml` to bulk-create servers and proxies
+- **Access control** — admin / user roles; mutating operations require admin
+- **Version check** — current version and latest release shown in the UI
+
+## Tech Stack
+
+| Component | Version |
+| --- | --- |
+| Go | 1.25 |
+| PocketBase | 0.35.0 |
+| frp | 0.68.0 |
+| React / TypeScript / Vite | 19 / 5.9 / 7 |
+
+## Quick Start
+
+### Option 1: Setup script
 
 ```bash
-# Docker
+bash scripts/setup.sh
+```
+
+Environment variables: `PORT` (default 8090), `IMAGE`, `CONTAINER_NAME`, `VOLUME_NAME`, `MODE=docker|binary`. See the [Getting Started guide](docs/guide/getting-started.md).
+
+### Option 2: Docker
+
+```bash
+docker run -d \
+  --name Nodus \
+  --restart unless-stopped \
+  -p 8090:8090 \
+  -v Nodus-data:/app/pb_data \
+  sexyfeifan/nodus:latest
+```
+
+Or with [deploy/docker-compose.yml](deploy/docker-compose.yml):
+
+```bash
+docker compose -f deploy/docker-compose.yml up -d
+```
+
+Pinned version:
+
+```bash
 docker pull sexyfeifan/nodus:0.0.3
 ```
 
-Or download platform binaries from [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest). See the [install docs](https://github.com/sexyfeifan/Nodus/tree/main/docs/en/deploy).
+### Option 3: Binary
+
+Download the archive for your platform from [Releases](https://github.com/sexyfeifan/Nodus/releases/latest) (the filename includes the version, e.g. `Nodus-v0.0.3-linux-amd64.tar.gz`):
+
+```bash
+tar -xzf Nodus-v0.0.3-linux-amd64.tar.gz
+./Nodus serve --http 0.0.0.0:8090
+```
+
+Then open `http://<server>:8090` and create the admin account.
+
+## Migrating from podux / frpc-hub / frpc
+
+Nodus shares the same PocketBase data layout as podux / frpc-hub, so copying `pb_data` migrates everything without loss. Native frpc configs are imported through the import API.
+
+```bash
+# preview first, then run
+bash scripts/migrate-to-nodus.sh --dry-run
+bash scripts/migrate-to-nodus.sh
+```
+
+The script backs up, copies data, starts Nodus and imports `frpc.toml`. If no previous data is found it performs a fresh install.
+
+Step-by-step instructions, manual migration, **copy-paste agent instructions for automated migration**, and rollback are in the [Migration Guide](docs/guide/migration.md).
+
+## Documentation
+
+| Document | Contents |
+| --- | --- |
+| [Getting Started](docs/guide/getting-started.md) | Docker / Compose install and initial setup |
+| [Migration Guide](docs/guide/migration.md) | podux / frpc-hub / frpc migration + agent instructions |
+| [Configuration](docs/guide/configuration.md) | Proxy and node options |
+| [Deployment](docs/deploy/install) | Docker / binary install and upgrade |
+| [Development](AGENT.md) | Local development, directory map, internals |
+
+## Release Timeline
+
+- 2026-09-25: v0.0.1 — first Nodus release (based on podux v0.1.6)
+- 2026-09-25: v0.0.2 — security hardening and defect fixes
+- 2026-09-25: v0.0.3 — role-escalation fix and docs asset names
 
 ## License
 

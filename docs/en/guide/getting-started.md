@@ -6,11 +6,17 @@ This guide helps you install and configure Nodus in under 5 minutes using Docker
 
 - [Docker](https://docs.docker.com/get-docker/) installed
 - A public server with frps deployed (or a third-party frp service)
-- The machine running Nodus must have internet access
+- The machine running Nodus must be able to reach frps
 
-::: info Don't have a public server yet?
-Check out **[RainYun](https://www.rainyun.com/s=ljw_?Nodus)** — an affordable and reliable cloud server provider, great for hosting frps and other self-hosted services.
-:::
+## Step 0: Setup script (optional)
+
+```bash
+bash scripts/setup.sh
+```
+
+The script pulls the image, creates the data volume and starts the container.
+It accepts `PORT`, `IMAGE`, `CONTAINER_NAME`, `VOLUME_NAME` and `MODE=docker|binary`.
+If you use it, jump to "Step 2: Create the admin account".
 
 ## Step 1: Start the Container
 

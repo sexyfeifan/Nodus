@@ -34,7 +34,6 @@ const ServerLogPage = lazy(() =>
 );
 
 function AuthenticatedLayout() {
-  console.log("AuthenticatedLayout rendered");
   return (
     <RequireSetup>
       <RequireAuth>

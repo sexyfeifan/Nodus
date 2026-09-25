@@ -1,7 +1,9 @@
 package importer
 
 import (
+	"database/sql"
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/pelletier/go-toml/v2"
@@ -153,6 +155,8 @@ func (s *Service) ParseToml(req *ParseTomlRequest) (*ImportPreviewResponse, erro
 	if err == nil {
 		serverDuplicate = true
 		existingServerId = existingServerRow.Id
+	} else if !errors.Is(err, sql.ErrNoRows) {
+		return nil, fmt.Errorf("检查服务器是否已存在失败: %w", err)
 	}
 
 	// Build auth map
@@ -254,6 +258,8 @@ func (s *Service) ParseToml(req *ParseTomlRequest) (*ImportPreviewResponse, erro
 			if perr == nil {
 				proxyInfo.IsDuplicate = true
 				proxyInfo.ExistingId = existingProxyRow.Id
+			} else if !errors.Is(perr, sql.ErrNoRows) {
+				return nil, fmt.Errorf("检查代理 %s 是否已存在失败: %w", p.Name, perr)
 			}
 		}
 
@@ -319,6 +325,8 @@ func (s *Service) handleServerImport(
 		One(&existingServerRow)
 	if existErr == nil {
 		serverExists = true
+	} else if !errors.Is(existErr, sql.ErrNoRows) {
+		return "", fmt.Errorf("检查服务器是否已存在失败: %w", existErr)
 	}
 
 	// Server exists but we're not importing: use existing ID for proxies
@@ -450,6 +458,10 @@ func (s *Service) handleProxyImport(
 				"serverId": serverId,
 			}).
 			One(&existingProxyRow)
+
+		if proxyExistsErr != nil && !errors.Is(proxyExistsErr, sql.ErrNoRows) {
+			return fmt.Errorf("检查代理 %s 是否已存在失败: %w", p.Name, proxyExistsErr)
+		}
 
 		var proxyRecord *core.Record
 		if proxyExistsErr == nil && opt.Overwrite {

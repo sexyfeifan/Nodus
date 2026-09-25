@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import pb from "../../lib/pocketbase";
 import { apiPost } from "../../lib/api";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export interface Proxy {
   id: string;
@@ -21,11 +22,18 @@ export interface Proxy {
   updated: string;
 }
 
+function escapeFilterValue(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
 export function useProxies() {
+  const { t } = useTranslation();
   const [proxies, setProxies] = useState<Proxy[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const initializedRef = useRef(false);
+  const mountedRef = useRef(true);
+  const requestIdRef = useRef(0);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -34,6 +42,13 @@ export function useProxies() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const PER_PAGE = 10;
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setDebouncedSearch(search), 300);
@@ -46,6 +61,7 @@ export function useProxies() {
 
   const fetchProxies = useCallback(
     async (isRefresh = false) => {
+      const requestId = ++requestIdRef.current;
       try {
         if (!initializedRef.current) {
           setLoading(true);
@@ -53,8 +69,9 @@ export function useProxies() {
           setRefreshing(true);
         }
 
+        const searchValue = escapeFilterValue(debouncedSearch);
         const searchFilter = debouncedSearch
-          ? `name ~ "${debouncedSearch}" || localIP ~ "${debouncedSearch}" || remotePort ~ "${debouncedSearch}"`
+          ? `name ~ "${searchValue}" || localIP ~ "${searchValue}" || remotePort ~ "${searchValue}"`
           : "";
 
         const [result, onlineResult] = await Promise.all([
@@ -67,6 +84,7 @@ export function useProxies() {
             filter: 'bootStatus = "online"',
           }),
         ]);
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
         setProxies(result.items);
         setTotalPages(result.totalPages);
         setTotalItems(result.totalItems);
@@ -74,13 +92,15 @@ export function useProxies() {
         initializedRef.current = true;
       } catch (err) {
         if ((err as Record<string, unknown>)?.isAbort) return;
-        toast.error(err instanceof Error ? err.message : "Failed to fetch proxies");
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
+        toast.error(err instanceof Error ? err.message : t("proxy.fetchFailed"));
       } finally {
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
         setLoading(false);
         setRefreshing(false);
       }
     },
-    [page, debouncedSearch]
+    [page, debouncedSearch, t]
   );
 
   useEffect(() => {
@@ -99,13 +119,13 @@ export function useProxies() {
     try {
       await pb.collection("fh_proxies").delete(id);
       await fetchProxies();
-      toast.success("Proxy deleted successfully");
+      toast.success(t("proxy.deleteSuccess"));
       // Reload frp config if we know which server this proxy belonged to
       if (proxy?.serverId) {
         await apiPost("/api/frpc/reload", { id: proxy.serverId });
       }
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to delete proxy");
+      toast.error(err instanceof Error ? err.message : t("proxy.deleteFailed"));
     }
   };
 
@@ -124,7 +144,7 @@ export function useProxies() {
       setProxies((prev) =>
         prev.map((p) => (p.id === proxy.id ? { ...p, status: proxy.status } : p))
       );
-      toast.error(err instanceof Error ? err.message : "Failed to update proxy status");
+      toast.error(err instanceof Error ? err.message : t("proxy.updateStatusFailed"));
     }
   };
 

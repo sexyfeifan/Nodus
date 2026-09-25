@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -11,6 +11,7 @@ import {
   Badge,
 } from "@radix-ui/themes";
 import { Icon } from "@iconify/react";
+import { toast } from "sonner";
 import { FormItem } from "../../components/FormItem";
 import pb from "../../lib/pocketbase";
 import { getGravatarUrl } from "../../lib/gravatar";
@@ -53,6 +54,12 @@ export function ProfileSettings() {
     fileInputRef.current?.click();
   };
 
+  useEffect(() => {
+    return () => {
+      if (avatarPreview) URL.revokeObjectURL(avatarPreview);
+    };
+  }, [avatarPreview]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -62,7 +69,7 @@ export function ProfileSettings() {
   };
 
   const handleSave = async () => {
-    if (!pb.authStore.model) return;
+    if (!pb.authStore.record) return;
     setSaving(true);
     try {
       const formData = new FormData();
@@ -70,7 +77,7 @@ export function ProfileSettings() {
       formData.append("nickname", nickname); // Just in case schema uses nickname
       // Email updates often require verification in PB, but we'll try updating it.
       // If email changes, PB might require token re-auth or email confirm.
-      if (email !== pb.authStore.model.email) {
+      if (email !== pb.authStore.record.email) {
         formData.append("email", email);
       }
 
@@ -78,13 +85,16 @@ export function ProfileSettings() {
         formData.append("avatar", avatarFile);
       }
 
-      await pb.collection("fh_users").update(pb.authStore.record!.id, formData);
+      const updated = await pb.collection("fh_users").update(pb.authStore.record.id, formData);
 
-      // Force refresh/reload might be needed or just let PB auth store update reactively
-      window.location.reload(); // Simple way to refresh state across app
+      // Refresh the auth store and local state in place of a full page reload
+      pb.authStore.save(pb.authStore.token, updated);
+      setAvatarFile(null);
+      setAvatarPreview(null);
+      toast.success(t("settings.profileUpdateSuccess"));
     } catch (error) {
       console.error("Failed to update profile", error);
-      alert("Failed to update profile. Please try again.");
+      toast.error(t("settings.profileUpdateFailed"));
     } finally {
       setSaving(false);
     }

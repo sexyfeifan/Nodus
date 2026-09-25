@@ -1,5 +1,6 @@
 import { Flex, Text, Badge } from "@radix-ui/themes";
 import { Icon } from "@iconify/react";
+import { useTranslation } from "react-i18next";
 
 interface NetworkStatus {
   reachable: boolean;
@@ -12,6 +13,8 @@ interface ServerLatencyProps {
 }
 
 export function ServerLatency({ networkStatus, size = "2" }: ServerLatencyProps) {
+  const { t } = useTranslation();
+
   if (!networkStatus) {
     return (
       <Text size={size} color="gray">
@@ -24,7 +27,7 @@ export function ServerLatency({ networkStatus, size = "2" }: ServerLatencyProps)
     return (
       <Badge color="gray" variant="soft">
         <Icon icon="lucide:x" width="12" height="12" />
-        Unreachable
+        {t("server.probeUnreachable")}
       </Badge>
     );
   }

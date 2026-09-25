@@ -12,7 +12,7 @@ Deploy Nodus with Docker — ideal for containerized environments or quick isola
 The official image is hosted on GitHub Container Registry:
 
 ```text
-ghcr.io/luckjiawei/Nodus:latest
+sexyfeifan/nodus:latest
 ```
 
 Supported architectures: `linux/amd64`, `linux/arm64`, `linux/arm/v7`
@@ -25,7 +25,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8090:8090 \
   -v ./Nodus-data:/app/pb_data \
-  ghcr.io/luckjiawei/Nodus:latest
+  sexyfeifan/nodus:latest
 ```
 
 | Flag | Description |
@@ -45,7 +45,7 @@ version: '3.8'
 
 services:
   Nodus:
-    image: ghcr.io/luckjiawei/Nodus:${VERSION:-latest}
+    image: sexyfeifan/nodus:${VERSION:-latest}
     container_name: Nodus
     restart: unless-stopped
 
@@ -128,7 +128,7 @@ docker run -d \
   --restart unless-stopped \
   -p 18090:18090 \
   -v ./Nodus-data:/app/pb_data \
-  ghcr.io/luckjiawei/Nodus:latest \
+  sexyfeifan/nodus:latest \
   serve --http 0.0.0.0:18090
 ```
 

@@ -1,7 +1,7 @@
 package monitoring
 
 import (
-	"Nodus/pkg/utils"
+	"nodus/pkg/utils"
 	"sync"
 	"time"
 

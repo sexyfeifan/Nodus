@@ -25,7 +25,7 @@ docker image prune -f
 
 ```bash
 # Pull the latest image
-docker pull ghcr.io/luckjiawei/Nodus:latest
+docker pull sexyfeifan/nodus:latest
 
 # Stop and remove the old container (data in volume is preserved)
 docker stop Nodus
@@ -37,7 +37,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8090:8090 \
   -v ./Nodus-data:/app/pb_data \
-  ghcr.io/luckjiawei/Nodus:latest
+  sexyfeifan/nodus:latest
 ```
 
 ## Upgrade to a Specific Version
@@ -49,7 +49,7 @@ To target a specific version instead of `latest`, set the image tag:
 VERSION=v1.2.0 docker compose up -d
 
 # Or edit the image field in docker-compose.yml
-image: ghcr.io/luckjiawei/Nodus:v1.2.0
+image: sexyfeifan/nodus:v1.2.0
 ```
 
 ## Rollback

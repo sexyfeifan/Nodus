@@ -9,6 +9,7 @@ import { TopologyChart } from "./TopologyChart";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Icon } from "@iconify/react";
 import { PageHeader } from "../../components/PageHeader";
+import { Loading } from "../../components/Loading";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -21,6 +22,7 @@ interface DashboardViewProps {
   trafficHistory: TrafficHistoryPoint[];
   topology: TopologyData;
   loading: boolean;
+  error?: string | null;
 }
 
 import { StatCard } from "../../components/StatCard";
@@ -40,7 +42,7 @@ function formatUptime(seconds: number): string {
   }
 }
 
-export function DashboardView({ stats, topology }: DashboardViewProps) {
+export function DashboardView({ stats, topology, loading, error }: DashboardViewProps) {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
@@ -58,6 +60,24 @@ export function DashboardView({ stats, topology }: DashboardViewProps) {
         visible={mounted}
       />
 
+      {loading ? (
+        <Flex justify="center" py="12">
+          <Loading size="small" />
+        </Flex>
+      ) : error ? (
+        <Card size="3">
+          <Flex direction="column" align="center" justify="center" gap="3" py="8">
+            <Icon icon="lucide:alert-triangle" color="var(--red-9)" width="48" height="48" />
+            <Text size="3" weight="medium">
+              {t("error.somethingWrong")}
+            </Text>
+            <Text size="2" color="gray">
+              {error}
+            </Text>
+          </Flex>
+        </Card>
+      ) : (
+        <>
       {/* Stats Cards Row 1 */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
         <motion.div
@@ -335,6 +355,8 @@ export function DashboardView({ stats, topology }: DashboardViewProps) {
           </Flex>
         </Card>
       </motion.div>
+        </>
+      )}
     </Flex>
   );
 }

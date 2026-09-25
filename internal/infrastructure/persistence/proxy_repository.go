@@ -1,7 +1,7 @@
 package persistence
 
 import (
-	"Nodus/internal/domain/proxy"
+	"nodus/internal/domain/proxy"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"

@@ -1,13 +1,13 @@
 package httphandler
 
 import (
-	"fmt"
 	"math"
 	"strconv"
+	"strings"
 	"time"
 
-	"Nodus/internal/application/monitoring"
-	"Nodus/pkg/response"
+	"nodus/internal/application/monitoring"
+	"nodus/pkg/response"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
@@ -80,9 +80,10 @@ func (h *ServerHandler) RegisterHandlers(e *core.ServeEvent) {
 		var total int64
 		countQ := h.app.DB().Select("COUNT(*)").From("fh_servers")
 		if search != "" {
+			escaped := strings.NewReplacer(`\`, `\\`, `%`, `\%`, `_`, `\_`).Replace(search)
 			countQ = countQ.Where(dbx.NewExp(
-				"(serverName LIKE {:s} OR serverAddr LIKE {:s} OR description LIKE {:s})",
-				dbx.Params{"s": "%" + search + "%"},
+				"(serverName LIKE {:s} ESCAPE '\\' OR serverAddr LIKE {:s} ESCAPE '\\' OR description LIKE {:s} ESCAPE '\\')",
+				dbx.Params{"s": "%" + escaped + "%"},
 			))
 		}
 		if err := countQ.Row(&total); err != nil {
@@ -152,7 +153,7 @@ func (h *ServerHandler) RegisterHandlers(e *core.ServeEvent) {
 	e.Router.GET("/api/servers/probe-history", requireAuth(func(e *core.RequestEvent) error {
 		serverID := e.Request.URL.Query().Get("serverId")
 		if serverID == "" {
-			return e.JSON(400, response.Error(fmt.Errorf("serverId is required")))
+			return e.JSON(400, response.Message("serverId is required"))
 		}
 
 		since := time.Now().UTC().Add(-30 * time.Minute).Format("2006-01-02 15:04:05.000Z")

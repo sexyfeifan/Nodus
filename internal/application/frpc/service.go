@@ -9,16 +9,14 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/signal"
 	"path/filepath"
 	"regexp"
 	"sync"
-	"syscall"
 	"time"
 
-	proxydomain "Nodus/internal/domain/proxy"
-	serverdomain "Nodus/internal/domain/server"
-	"Nodus/pkg/utils"
+	proxydomain "nodus/internal/domain/proxy"
+	serverdomain "nodus/internal/domain/server"
+	"nodus/pkg/utils"
 
 	"github.com/fatedier/frp/client"
 	frpcsource "github.com/fatedier/frp/pkg/config/source"
@@ -64,7 +62,7 @@ func (fs *Service) genCommonCfgs(id *string) (*v1.ClientCommonConfig, error) {
 	cfg.ServerPort = record.GetInt("serverPort")
 	cfg.User = record.GetString("user")
 
-	logDirPath := filepath.Join("pb_data", "frpc", *id)
+	logDirPath := filepath.Join(fs.app.DataDir(), "frpc", *id)
 	if err := os.MkdirAll(logDirPath, 0755); err != nil {
 		return nil, err
 	}
@@ -100,7 +98,7 @@ func (fs *Service) genCommonCfgs(id *string) (*v1.ClientCommonConfig, error) {
 		return nil, err
 	}
 	cfg.Transport = transportConfig
-	if *cfg.Transport.TLS.Enable {
+	if cfg.Transport.TLS.Enable != nil && *cfg.Transport.TLS.Enable {
 		certsDir := filepath.Join(mainPath, "certs")
 		hasCert := cfg.Transport.TLS.CertFile != "" && cfg.Transport.TLS.KeyFile != ""
 		hasCa := cfg.Transport.TLS.TrustedCaFile != ""
@@ -217,15 +215,16 @@ func (fs *Service) genProxyCfgs(serverId *string) ([]v1.ProxyConfigurer, error) 
 	return proxyCfgs, nil
 }
 
-func handleTermSignal(svr *client.Service) {
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-	<-ch
-	svr.GracefulClose(500 * time.Millisecond)
-}
-
 func (fs *Service) LaunchFrpc(serverId *string) error {
 	fs.app.Logger().Info("Launch frpc", "id", *serverId)
+
+	fs.mu.RLock()
+	_, alreadyRunning := fs.processes[*serverId]
+	fs.mu.RUnlock()
+	if alreadyRunning {
+		return errors.New("server is already running")
+	}
+
 	cfg, err := fs.genCommonCfgs(serverId)
 	if err != nil {
 		return err
@@ -262,12 +261,14 @@ func (fs *Service) LaunchFrpc(serverId *string) error {
 		fs.app.Logger().Error("NewService", "err", err)
 		return err
 	}
-	shouldGracefulClose := cfg.Transport.Protocol == "kcp" || cfg.Transport.Protocol == "quic"
-	if shouldGracefulClose {
-		go handleTermSignal(svr)
-	}
 	ctx, cancel := context.WithCancel(context.Background())
 	fs.mu.Lock()
+	if _, exists := fs.processes[*serverId]; exists {
+		fs.mu.Unlock()
+		cancel()
+		svr.GracefulClose(500 * time.Millisecond)
+		return errors.New("server is already running")
+	}
 	fs.processes[*serverId] = svr
 	fs.statusMonitors[*serverId] = cancel
 	fs.mu.Unlock()
@@ -413,7 +414,7 @@ func (fs *Service) TerminateFrpc(id *string) error {
 }
 
 func (fs *Service) getFrpMainPath(id *string) string {
-	return filepath.Join("pb_data", "frpc", *id)
+	return filepath.Join(fs.app.DataDir(), "frpc", *id)
 }
 
 // StreamLog streams the frpc log file via SSE.
@@ -434,7 +435,11 @@ func (fs *Service) StreamLog(serverId string, ctx context.Context, w http.Respon
 		flusher.Flush()
 		return
 	}
-	defer file.Close()
+	defer func() {
+		if file != nil {
+			file.Close()
+		}
+	}()
 
 	initialLines := utils.ReadLastNLines(file, 50)
 	fs.app.Logger().Info("Streaming log file", "serverId", serverId, "initialLines", len(initialLines))
@@ -465,6 +470,7 @@ func (fs *Service) StreamLog(serverId string, ctx context.Context, w http.Respon
 				file.Close()
 				file, err = os.Open(logPath)
 				if err != nil {
+					file = nil
 					continue
 				}
 				offset = 0
@@ -505,10 +511,35 @@ func (fs *Service) ReloadFrpc(serverId *string) error {
 	fs.mu.RLock()
 	svr := fs.processes[*serverId]
 	fs.mu.RUnlock()
+	if svr == nil {
+		return errors.New("server is not running")
+	}
 	// TODO 2026-02-08 reload visitorCfgs
 	svr.UpdateAllConfigurer(proxyCfgs, nil)
 
 	return nil
+}
+
+// CloseAll gracefully closes every running frpc client. Bound to app termination
+// so kcp/quic transports shut down cleanly without per-process signal handlers.
+func (fs *Service) CloseAll() {
+	fs.mu.Lock()
+	services := make([]*client.Service, 0, len(fs.processes))
+	cancels := make([]context.CancelFunc, 0, len(fs.statusMonitors))
+	for _, svr := range fs.processes {
+		services = append(services, svr)
+	}
+	for _, cancel := range fs.statusMonitors {
+		cancels = append(cancels, cancel)
+	}
+	fs.mu.Unlock()
+
+	for _, cancel := range cancels {
+		cancel()
+	}
+	for _, svr := range services {
+		svr.GracefulClose(500 * time.Millisecond)
+	}
 }
 
 // IsServerRunning checks if a server is currently running.
@@ -538,15 +569,15 @@ func (fs *Service) AutoStartServers() {
 
 		fs.app.Logger().Info("Auto-starting server", "id", serverId, "name", serverName)
 
-		go func(id string) {
-			time.Sleep(time.Duration(count) * 500 * time.Millisecond)
+		go func(id string, delay time.Duration) {
+			time.Sleep(delay)
 
 			if err := fs.LaunchFrpc(&id); err != nil {
 				fs.app.Logger().Error("Failed to auto-start server", "id", id, "error", err)
 			} else {
 				fs.app.Logger().Info("Successfully auto-started server", "id", id)
 			}
-		}(serverId)
+		}(serverId, time.Duration(count)*500*time.Millisecond)
 
 		count++
 		fs.app.Logger().Info("Waiting for 1s before auto-starting next server")

@@ -30,10 +30,10 @@ pkill Nodus
 
 ### 3. 下载新版本
 
-前往 [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) 查看最新版本，或通过命令行下载（以 Linux amd64 为例）：
+前往 [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) 查看最新版本，或通过命令行下载（以 Linux amd64 为例）：
 
 ```bash
-curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
 tar -xzf Nodus-linux-amd64.tar.gz
 ```
 

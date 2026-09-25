@@ -3,7 +3,7 @@ package monitoring
 import (
 	"encoding/json"
 	"fmt"
-	"Nodus/pkg/utils"
+	"nodus/pkg/utils"
 	"time"
 
 	"github.com/pocketbase/dbx"
@@ -34,6 +34,13 @@ func NewMonitorService(app core.App, geoService *GeoService, metricsService *Met
 // latencyInterval: how often to check latency (e.g., 30s).
 // geoInterval: how often to check geolocation (e.g., 24h).
 func (s *MonitorService) Start(latencyInterval, geoInterval time.Duration) {
+	if latencyInterval < time.Second {
+		latencyInterval = 5 * time.Second
+	}
+	if geoInterval < time.Second {
+		geoInterval = 24 * time.Hour
+	}
+
 	s.app.Logger().Info("Starting network monitor service",
 		"latencyInterval", latencyInterval,
 		"geoInterval", geoInterval)

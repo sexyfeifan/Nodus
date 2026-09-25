@@ -39,7 +39,9 @@ export const useSystemStore = create<SystemStore>()(
           return data.initialized;
         } catch (error: any) {
           set({ error: error.message });
-          return false;
+          // Propagate so callers can tell "not initialized" (false) apart from
+          // network/server errors (rejection).
+          throw error;
         } finally {
           set({ isLoading: false });
         }

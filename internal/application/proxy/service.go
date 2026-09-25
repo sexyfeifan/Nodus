@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	proxydomain "Nodus/internal/domain/proxy"
+	proxydomain "nodus/internal/domain/proxy"
 
 	"github.com/pocketbase/pocketbase/core"
 )

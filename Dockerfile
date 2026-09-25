@@ -31,7 +31,7 @@ ARG TARGETVARIANT
 RUN GOARM=$(echo "${TARGETVARIANT}" | tr -d 'v') \
     CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} go build \
     -trimpath \
-    -ldflags "-s -w -X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}" \
+    -ldflags "-s -w -X nodus/pkg/buildinfo.AppVersion=${VERSION} -X nodus/pkg/buildinfo.BuildTime=${BUILD_TIME}" \
     -o Nodus \
     main.go
 

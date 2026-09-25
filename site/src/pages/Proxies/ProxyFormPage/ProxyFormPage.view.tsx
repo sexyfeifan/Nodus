@@ -210,13 +210,13 @@ export function ProxyFormPageView({
                       >
                         <Flex gap="3">
                           <Box className="flex-[2]">
-                            <FormItem label={t("proxy.localAddress")} required error={errors.localIp}>
+                            <FormItem label={t("proxy.localAddress")} required error={errors.localIP}>
                               <TextField.Root
                                 size="2"
                                 placeholder={t("proxy.localAddressPlaceholder")}
-                                value={formData.localIp}
-                                onChange={(e) => onChange("localIp", e.target.value)}
-                                color={errors.localIp ? "red" : undefined}
+                                value={formData.localIP}
+                                onChange={(e) => onChange("localIP", e.target.value)}
+                                color={errors.localIP ? "red" : undefined}
                               />
                             </FormItem>
                           </Box>

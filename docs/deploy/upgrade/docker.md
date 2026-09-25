@@ -25,7 +25,7 @@ docker image prune -f
 
 ```bash
 # 拉取最新镜像
-docker pull ghcr.io/luckjiawei/Nodus:latest
+docker pull sexyfeifan/nodus:latest
 
 # 停止并删除旧容器（数据存储在 volume 中，不会丢失）
 docker stop Nodus
@@ -37,7 +37,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8090:8090 \
   -v ./Nodus-data:/app/pb_data \
-  ghcr.io/luckjiawei/Nodus:latest
+  sexyfeifan/nodus:latest
 ```
 
 ## 升级到指定版本
@@ -49,7 +49,7 @@ docker run -d \
 VERSION=v1.2.0 docker compose up -d
 
 # 或编辑 docker-compose.yml 中的 image 字段
-image: ghcr.io/luckjiawei/Nodus:v1.2.0
+image: sexyfeifan/nodus:v1.2.0
 ```
 
 ## 回滚

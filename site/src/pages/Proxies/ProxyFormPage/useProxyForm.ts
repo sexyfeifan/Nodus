@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import pb from "../../../lib/pocketbase";
@@ -10,7 +10,7 @@ export interface ProxyFormData {
   serverId: string;
   name: string;
   type: "tcp" | "udp" | "http" | "https" | "tcpmux" | "stcp" | "sudp" | "xtcp";
-  localIp: string;
+  localIP: string;
   localPort: string;
   remotePort: string;
   customDomains: string[];
@@ -28,7 +28,7 @@ const DEFAULT_FORM: ProxyFormData = {
   serverId: "",
   name: "",
   type: "tcp",
-  localIp: "127.0.0.1",
+  localIP: "127.0.0.1",
   localPort: "",
   remotePort: "",
   customDomains: [],
@@ -64,6 +64,7 @@ export function useProxyForm() {
   const [loadingProxy, setLoadingProxy] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof ProxyFormData, string>>>({});
+  const existingStatusRef = useRef<"enabled" | "disabled">("enabled");
 
   useEffect(() => {
     const fetchServers = async () => {
@@ -78,7 +79,7 @@ export function useProxyForm() {
         }
       } catch (err) {
         console.error("Failed to fetch servers:", err);
-        toast.error("Failed to fetch servers");
+        toast.error(t("server.fetchFailed"));
       } finally {
         setLoadingServers(false);
       }
@@ -93,11 +94,12 @@ export function useProxyForm() {
         setLoadingProxy(true);
         const record = await pb.collection("fh_proxies").getOne(id);
         const plugin = record.plugin as Record<string, string> | null | undefined;
+        existingStatusRef.current = record.status === "disabled" ? "disabled" : "enabled";
         setFormData({
           serverId: record.serverId as string,
           name: (record.name as string) || "",
           type: record.proxyType as ProxyFormData["type"],
-          localIp: (record.localIP as string) || "127.0.0.1",
+          localIP: (record.localIP as string) || "127.0.0.1",
           localPort: String(record.localPort || ""),
           remotePort: String(record.remotePort || ""),
           subdomain: (record.subdomain as string) || "",
@@ -111,7 +113,7 @@ export function useProxyForm() {
           pluginPassword: plugin?.password || "",
         });
       } catch {
-        toast.error("Failed to load proxy");
+        toast.error(t("proxy.loadFailed"));
         navigate("/proxies");
       } finally {
         setLoadingProxy(false);
@@ -127,7 +129,7 @@ export function useProxyForm() {
         case "name":
           if (!REGEX.PROXY_NAME.test(value)) error = t("proxy.errorInvalidName");
           break;
-        case "localIp":
+        case "localIP":
           if (!REGEX.IP_OR_HOSTNAME.test(value)) error = t("proxy.errorInvalidIP");
           break;
         case "localPort":
@@ -163,8 +165,8 @@ export function useProxyForm() {
     else if (!REGEX.PROXY_NAME.test(data.name)) newErrors.name = t("proxy.errorInvalidName");
 
     if (!isSocks5) {
-      if (!data.localIp) newErrors.localIp = t("proxy.errorRequired");
-      else if (!REGEX.IP_OR_HOSTNAME.test(data.localIp)) newErrors.localIp = t("proxy.errorInvalidIP");
+      if (!data.localIP) newErrors.localIP = t("proxy.errorRequired");
+      else if (!REGEX.IP_OR_HOSTNAME.test(data.localIP)) newErrors.localIP = t("proxy.errorInvalidIP");
 
       if (!data.localPort) newErrors.localPort = t("proxy.errorRequired");
       else if (!REGEX.PORT.test(data.localPort)) newErrors.localPort = t("proxy.errorInvalidPort");
@@ -198,7 +200,7 @@ export function useProxyForm() {
       serverId: formData.serverId,
       proxyType: formData.type,
       name: formData.name,
-      localIP: formData.localIp,
+      localIP: formData.localIP,
       localPort: formData.localPort,
       remotePort: formData.remotePort,
       subdomain: formData.subdomain,
@@ -209,21 +211,21 @@ export function useProxyForm() {
       },
       plugin,
       description: formData.description,
-      status: "enabled",
+      status: isEditing ? existingStatusRef.current : "enabled",
     };
 
     try {
       setSubmitting(true);
       if (isEditing) {
         await pb.collection("fh_proxies").update(id!, payload);
-        toast.success("Proxy updated successfully");
+        toast.success(t("proxy.updateSuccess"));
       } else {
         await pb.collection("fh_proxies").create({ bootStatus: "offline", ...payload });
-        toast.success("Proxy created successfully");
+        toast.success(t("proxy.createSuccess"));
       }
       navigate("/proxies");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save proxy");
+      toast.error(err instanceof Error ? err.message : t("proxy.saveFailed"));
     } finally {
       setSubmitting(false);
     }

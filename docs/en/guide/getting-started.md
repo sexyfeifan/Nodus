@@ -20,7 +20,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8090:8090 \
   -v Nodus-data:/app/pb_data \
-  ghcr.io/luckjiawei/Nodus:latest
+  sexyfeifan/nodus:latest
 ```
 
 On successful startup, the terminal will display:
@@ -36,7 +36,7 @@ You can also manage it with Docker Compose:
 ```yaml
 services:
   Nodus:
-    image: ghcr.io/luckjiawei/Nodus:latest
+    image: sexyfeifan/nodus:latest
     container_name: Nodus
     restart: unless-stopped
     ports:

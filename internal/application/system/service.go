@@ -5,9 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
-	"Nodus/pkg/buildinfo"
+	"nodus/pkg/buildinfo"
 
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -38,14 +39,14 @@ func NewService(app core.App) *Service {
 	return &Service{app: app}
 }
 
-// CheckInitialized checks if the system has been initialized.
-func (s *Service) CheckInitialized() (bool, error) {
-	collection, err := s.app.FindCollectionByNameOrId("fh_settings")
+// checkInitialized checks if the system has been initialized against the given app (or transaction).
+func checkInitialized(app core.App) (bool, error) {
+	collection, err := app.FindCollectionByNameOrId("fh_settings")
 	if err != nil {
 		return false, fmt.Errorf("failed to find settings collection: %w", err)
 	}
 
-	record, err := s.app.FindRecordById(collection, SettingsID)
+	record, err := app.FindRecordById(collection, SettingsID)
 	if err != nil {
 		// If record doesn't exist, system is not initialized
 		return false, nil
@@ -53,6 +54,11 @@ func (s *Service) CheckInitialized() (bool, error) {
 
 	initialized := record.GetBool("initialized")
 	return initialized, nil
+}
+
+// CheckInitialized checks if the system has been initialized.
+func (s *Service) CheckInitialized() (bool, error) {
+	return checkInitialized(s.app)
 }
 
 // GetSettings retrieves the system settings.
@@ -127,14 +133,14 @@ func (s *Service) GetMonitoringIntervals() (latencyInterval, geoInterval time.Du
 
 	latencyInterval = defaultLatency
 	if v, ok := settings.General["latencyCheckInterval"]; ok {
-		if secs, ok := toFloat64(v); ok && secs > 0 {
+		if secs, ok := toFloat64(v); ok && secs >= 1 && secs <= 24*3600 {
 			latencyInterval = time.Duration(secs) * time.Second
 		}
 	}
 
 	geoInterval = defaultGeo
 	if v, ok := settings.General["locationCheckInterval"]; ok {
-		if secs, ok := toFloat64(v); ok && secs > 0 {
+		if secs, ok := toFloat64(v); ok && secs >= 1 && secs <= 30*24*3600 {
 			geoInterval = time.Duration(secs) * time.Second
 		}
 	}
@@ -173,7 +179,7 @@ type LatestVersionResponse struct {
 func (s *Service) GetLatestVersion() (*LatestVersionResponse, error) {
 	client := &http.Client{Timeout: 10 * time.Second}
 
-	req, err := http.NewRequest("GET", "https://ghp.Nodus.io/repos/luckjiawei/Nodus/releases/latest", nil)
+	req, err := http.NewRequest("GET", "https://api.github.com/repos/sexyfeifan/Nodus/releases/latest", nil)
 	if err != nil {
 		return nil, err
 	}
@@ -198,6 +204,10 @@ func (s *Service) GetLatestVersion() (*LatestVersionResponse, error) {
 	return &release, nil
 }
 
+// initializeMu serializes concurrent initialization attempts to prevent
+// duplicate admin accounts racing past the initialized check.
+var initializeMu sync.Mutex
+
 // InitializeSystem initializes the system with admin user and settings (with transaction).
 func (s *Service) InitializeSystem(req *InitializeRequest) error {
 	if req.Email == "" || req.Password == "" {
@@ -208,16 +218,18 @@ func (s *Service) InitializeSystem(req *InitializeRequest) error {
 		req.Language = "en"
 	}
 
-	initialized, err := s.CheckInitialized()
-	if err != nil {
-		return fmt.Errorf("failed to check initialization status: %w", err)
-	}
-
-	if initialized {
-		return errors.New("system is already initialized")
-	}
+	initializeMu.Lock()
+	defer initializeMu.Unlock()
 
 	return s.app.RunInTransaction(func(txApp core.App) error {
+		initialized, err := checkInitialized(txApp)
+		if err != nil {
+			return fmt.Errorf("failed to check initialization status: %w", err)
+		}
+		if initialized {
+			return errors.New("system is already initialized")
+		}
+
 		usersCollection, err := txApp.FindCollectionByNameOrId("fh_users")
 		if err != nil {
 			return fmt.Errorf("failed to find users collection: %w", err)
@@ -228,6 +240,7 @@ func (s *Service) InitializeSystem(req *InitializeRequest) error {
 		userRecord.Set("password", req.Password)
 		userRecord.Set("passwordConfirm", req.Password)
 		userRecord.Set("emailVisibility", true)
+		userRecord.Set("role", "admin")
 
 		if err := txApp.Save(userRecord); err != nil {
 			return fmt.Errorf("failed to create admin user: %w", err)

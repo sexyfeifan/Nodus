@@ -1,7 +1,7 @@
 package httphandler
 
 import (
-	"Nodus/internal/application/version"
+	"nodus/internal/application/version"
 
 	"github.com/pocketbase/pocketbase/core"
 )

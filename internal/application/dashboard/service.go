@@ -1,10 +1,10 @@
 package dashboard
 
 import (
-	proxyapp "Nodus/internal/application/proxy"
-	serverapp "Nodus/internal/application/server"
-	proxydomain "Nodus/internal/domain/proxy"
-	serverdomain "Nodus/internal/domain/server"
+	proxyapp "nodus/internal/application/proxy"
+	serverapp "nodus/internal/application/server"
+	proxydomain "nodus/internal/domain/proxy"
+	serverdomain "nodus/internal/domain/server"
 	"time"
 
 	"github.com/pocketbase/pocketbase/core"

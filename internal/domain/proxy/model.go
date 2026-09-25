@@ -1,6 +1,6 @@
 package proxy
 
-import "Nodus/pkg/types"
+import "nodus/pkg/types"
 
 // Proxy represents a frpc proxy configuration record.
 type Proxy struct {
@@ -8,7 +8,7 @@ type Proxy struct {
 	ServerId      string                `db:"serverId" json:"serverId"`
 	ProxyType     string                `db:"proxyType" json:"proxyType"`
 	Name          string                `db:"name" json:"name"`
-	LocalIP       string                `db:"localIP" json:"localIp"`
+	LocalIP       string                `db:"localIP" json:"localIP"`
 	LocalPort     types.NullableInt     `db:"localPort" json:"localPort"`
 	RemotePort    types.NullableInt     `db:"remotePort" json:"remotePort,omitempty"`
 	Subdomain     string                `db:"subdomain" json:"subdomain"`

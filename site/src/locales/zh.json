@@ -239,6 +239,17 @@
     "startFailed": "服务器启动失败",
     "stopSuccess": "服务器停止成功",
     "stopFailed": "服务器停止失败",
+    "launchSuccess": "服务器启动成功",
+    "launchFailed": "启动服务器失败",
+    "terminateSuccess": "服务器已终止",
+    "terminateFailed": "终止服务器失败",
+    "createSuccess": "服务器创建成功",
+    "updateSuccess": "服务器更新成功",
+    "saveFailed": "保存服务器失败",
+    "fetchFailed": "获取服务器失败",
+    "deleteSuccess": "服务器删除成功",
+    "deleteFailed": "删除服务器失败",
+    "logStreamFailed": "日志流连接失败",
     "statusCard": "服务器状态",
     "latencyChartCard": "延迟曲线",
     "probeNormal": "正常",
@@ -343,7 +354,15 @@
     "errorInvalidIP": "无效的 IP 或主机名",
     "errorInvalidPort": "无效的端口（1-65535）",
     "errorRequired": "必填",
-    "errorSubdomainRequired": "子域名或自定义域名为必填项"
+    "errorSubdomainRequired": "子域名或自定义域名为必填项",
+    "fetchFailed": "获取代理失败",
+    "deleteSuccess": "代理删除成功",
+    "deleteFailed": "删除代理失败",
+    "updateStatusFailed": "更新代理状态失败",
+    "createSuccess": "代理创建成功",
+    "updateSuccess": "代理更新成功",
+    "saveFailed": "保存代理失败",
+    "loadFailed": "加载代理失败"
   },
   "settings": {
     "title": "设置",
@@ -396,7 +415,9 @@
     "passwordsDoNotMatch": "新密码不匹配",
     "passwordTooShort": "密码长度至少为 8 个字符",
     "incorrectPassword": "当前密码不正确",
-    "passwordUpdateSuccess": "密码更新成功！请重新登录。"
+    "passwordUpdateSuccess": "密码更新成功！请重新登录。",
+    "profileUpdateSuccess": "个人资料更新成功",
+    "profileUpdateFailed": "更新个人资料失败，请重试。"
   },
   "language": {
     "en": "English",

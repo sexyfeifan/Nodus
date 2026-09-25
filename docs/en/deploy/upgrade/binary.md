@@ -30,10 +30,10 @@ pkill Nodus
 
 ### 3. Download the New Version
 
-Visit [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) for the latest version, or download via command line (Linux amd64 example):
+Visit [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) for the latest version, or download via command line (Linux amd64 example):
 
 ```bash
-curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
 tar -xzf Nodus-linux-amd64.tar.gz
 ```
 

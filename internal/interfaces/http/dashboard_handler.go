@@ -1,8 +1,8 @@
 package httphandler
 
 import (
-	"Nodus/internal/application/dashboard"
-	"Nodus/pkg/response"
+	"nodus/internal/application/dashboard"
+	"nodus/pkg/response"
 
 	"github.com/pocketbase/pocketbase/core"
 )

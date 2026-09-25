@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import pb from "../../../lib/pocketbase";
 import { apiGet } from "../../../lib/api";
 import { toast } from "sonner";
@@ -79,12 +80,22 @@ export function useServerForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<ServerFormData>(defaultData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [loadingServer, setLoadingServer] = useState(isEditing);
   const [frpVersion, setFrpVersion] = useState("");
+  const mountedRef = useRef(true);
+  const requestIdRef = useRef(0);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     apiGet("/api/frp/version")
@@ -95,10 +106,12 @@ export function useServerForm() {
 
   useEffect(() => {
     if (!id) return;
-    setLoadingServer(true);
-    pb.collection("fh_servers")
-      .getOne(id)
-      .then((record) => {
+    const requestId = ++requestIdRef.current;
+    const fetchServer = async () => {
+      try {
+        setLoadingServer(true);
+        const record = await pb.collection("fh_servers").getOne(id);
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
         setFormData({
           ...defaultData,
           serverName: record.serverName || "",
@@ -120,13 +133,17 @@ export function useServerForm() {
           },
           metadatas: record.metadatas || {},
         });
-      })
-      .catch(() => {
-        toast.error("Failed to load server");
+      } catch {
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
+        toast.error(t("server.failedToLoad"));
         navigate("/servers");
-      })
-      .finally(() => setLoadingServer(false));
-  }, [id, navigate]);
+      } finally {
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
+        setLoadingServer(false);
+      }
+    };
+    fetchServer();
+  }, [id, navigate, t]);
 
   const handleChange = (
     field: keyof Omit<ServerFormData, "auth" | "log" | "transport" | "metadatas">,
@@ -206,14 +223,14 @@ export function useServerForm() {
       const payload = { ...formData, serverPort: Number(formData.serverPort) };
       if (isEditing) {
         await pb.collection("fh_servers").update(id!, payload);
-        toast.success("Server updated successfully");
+        toast.success(t("server.updateSuccess"));
       } else {
         await pb.collection("fh_servers").create({ ...payload, bootStatus: "stopped" });
-        toast.success("Server created successfully");
+        toast.success(t("server.createSuccess"));
       }
       navigate("/servers");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save server");
+      toast.error(err instanceof Error ? err.message : t("server.saveFailed"));
     } finally {
       setSubmitting(false);
     }

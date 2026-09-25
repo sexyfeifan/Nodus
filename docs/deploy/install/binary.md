@@ -8,7 +8,7 @@
 
 ## 下载
 
-前往 [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) 页面，根据你的系统选择对应的安装包：
+前往 [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) 页面，根据你的系统选择对应的安装包：
 
 | 系统 | 架构 | 文件名 |
 | --- | --- | --- |
@@ -22,7 +22,7 @@
 也可以通过命令行直接下载（以 Linux amd64 为例）：
 
 ```bash
-curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
 ```
 
 ## 安装

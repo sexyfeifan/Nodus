@@ -157,7 +157,7 @@ build_binary() {
     # Build with version information
     GOOS=$goos GOARCH=$goarch CGO_ENABLED=0 go build \
         -trimpath \
-        -ldflags "-s -w -X main.Version=${VERSION} -X main.BuildTime=${BUILD_TIME}" \
+        -ldflags "-s -w -X nodus/pkg/buildinfo.AppVersion=${VERSION} -X nodus/pkg/buildinfo.BuildTime=${BUILD_TIME}" \
         -o "$output_path" \
         ../main.go
 
@@ -199,7 +199,7 @@ main() {
     # Tidy go modules
     print_info "Tidying Go modules..."
     cd ..
-    go mod tidy
+    # go mod tidy intentionally omitted: builds must not mutate go.mod
     cd build
 
     print_header "Building Binaries"

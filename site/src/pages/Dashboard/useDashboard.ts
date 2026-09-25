@@ -72,6 +72,8 @@ export function useDashboard() {
   const [activities] = useState<RecentActivity[]>([]);
   const [trafficHistory, setTrafficHistory] = useState<TrafficHistoryPoint[]>([]);
   const [topology, setTopology] = useState<TopologyData>({ servers: [], proxies: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Format traffic data
@@ -101,6 +103,7 @@ export function useDashboard() {
           proxyTypeCounts: data.proxyTypeCounts || {},
           uptimeSeconds: data.uptimeSeconds || 0,
         });
+        setError(null);
 
         // Fetch topology from API
         try {
@@ -130,6 +133,9 @@ export function useDashboard() {
         }
       } catch (err) {
         console.error("Failed to load dashboard data:", err);
+        setError(err instanceof Error ? err.message : "Failed to load dashboard data");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -140,5 +146,5 @@ export function useDashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  return { stats, activities, trafficHistory, topology };
+  return { stats, activities, trafficHistory, topology, loading, error };
 }

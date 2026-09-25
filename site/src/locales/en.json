@@ -239,6 +239,17 @@
     "startFailed": "Failed to start server",
     "stopSuccess": "Server stopped successfully",
     "stopFailed": "Failed to stop server",
+    "launchSuccess": "Server launched successfully",
+    "launchFailed": "Failed to launch server",
+    "terminateSuccess": "Server terminated successfully",
+    "terminateFailed": "Failed to terminate server",
+    "createSuccess": "Server created successfully",
+    "updateSuccess": "Server updated successfully",
+    "saveFailed": "Failed to save server",
+    "fetchFailed": "Failed to fetch servers",
+    "deleteSuccess": "Server deleted successfully",
+    "deleteFailed": "Failed to delete server",
+    "logStreamFailed": "Log stream connection failed",
     "statusCard": "Server Status",
     "latencyChartCard": "Latency History",
     "probeNormal": "Normal",
@@ -343,7 +354,15 @@
     "errorInvalidIP": "Invalid IP or hostname",
     "errorInvalidPort": "Invalid port (1-65535)",
     "errorRequired": "Required",
-    "errorSubdomainRequired": "Subdomain or custom domains required"
+    "errorSubdomainRequired": "Subdomain or custom domains required",
+    "fetchFailed": "Failed to fetch proxies",
+    "deleteSuccess": "Proxy deleted successfully",
+    "deleteFailed": "Failed to delete proxy",
+    "updateStatusFailed": "Failed to update proxy status",
+    "createSuccess": "Proxy created successfully",
+    "updateSuccess": "Proxy updated successfully",
+    "saveFailed": "Failed to save proxy",
+    "loadFailed": "Failed to load proxy"
   },
   "settings": {
     "title": "Settings",
@@ -396,7 +415,9 @@
     "passwordsDoNotMatch": "New passwords do not match",
     "passwordTooShort": "Password must be at least 8 characters long",
     "incorrectPassword": "Current password is incorrect",
-    "passwordUpdateSuccess": "Password updated successfully! Please sign in again."
+    "passwordUpdateSuccess": "Password updated successfully! Please sign in again.",
+    "profileUpdateSuccess": "Profile updated successfully",
+    "profileUpdateFailed": "Failed to update profile. Please try again."
   },
   "language": {
     "en": "English",

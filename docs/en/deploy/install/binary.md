@@ -8,7 +8,7 @@ Install Nodus using pre-compiled binaries — ideal for running directly on a se
 
 ## Download
 
-Go to the [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest) page and download the package for your platform:
+Go to the [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) page and download the package for your platform:
 
 | OS | Architecture | Filename |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ Go to the [GitHub Releases](https://github.com/luckjiawei/Nodus/releases/latest)
 Or download directly from the command line (Linux amd64 example):
 
 ```bash
-curl -LO https://github.com/luckjiawei/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
 ```
 
 ## Install

@@ -20,7 +20,7 @@ docker run -d \
   --restart unless-stopped \
   -p 8090:8090 \
   -v Nodus-data:/app/pb_data \
-  ghcr.io/luckjiawei/Nodus:latest
+  sexyfeifan/nodus:latest
 ```
 
 启动成功后，终端会输出类似以下内容：
@@ -36,7 +36,7 @@ Admin: http://0.0.0.0:8090/_/
 ```yaml
 services:
   Nodus:
-    image: ghcr.io/luckjiawei/Nodus:latest
+    image: sexyfeifan/nodus:latest
     container_name: Nodus
     restart: unless-stopped
     ports:

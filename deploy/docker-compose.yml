@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   Nodus:
-    image: ghcr.io/luckjiawei/Nodus:${VERSION:-latest}
+    image: sexyfeifan/nodus:${VERSION:-latest}
     container_name: Nodus
     restart: unless-stopped
 

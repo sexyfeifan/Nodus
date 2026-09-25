@@ -38,8 +38,8 @@ func PingHost(addr string, timeout time.Duration) PingResult {
 	}
 
 	// If address doesn't contain port, default to 7000
-	if !strings.Contains(addr, ":") {
-		addr = addr + ":7000"
+	if _, _, err := net.SplitHostPort(addr); err != nil {
+		addr = net.JoinHostPort(addr, "7000")
 	}
 
 	start := time.Now()
@@ -87,11 +87,12 @@ func GetGeoLocation(addr string) (*GeoLocation, error) {
 
 // resolveAddr resolves address and extracts IP
 func resolveAddr(addr string) (string, error) {
-	// Remove port number
 	host := addr
-	if idx := strings.LastIndex(addr, ":"); idx != -1 {
-		host = addr[:idx]
+	// Strip port if present (handles bare IPv6 literals without ports too)
+	if h, _, err := net.SplitHostPort(addr); err == nil {
+		host = h
 	}
+	host = strings.Trim(host, "[]")
 
 	// Return directly if already an IP address
 	if net.ParseIP(host) != nil {
@@ -119,35 +120,28 @@ func resolveAddr(addr string) (string, error) {
 	return ips[0].String(), nil
 }
 
-// isPrivateIP checks if an IP is private
+// isPrivateIP checks if an IP is private, loopback, link-local or CGNAT
 func isPrivateIP(ip string) bool {
 	parsedIP := net.ParseIP(ip)
 	if parsedIP == nil {
 		return false
 	}
 
-	// Private IP ranges
-	privateRanges := []string{
-		"10.0.0.0/8",
-		"172.16.0.0/12",
-		"192.168.0.0/16",
-		"127.0.0.0/8",
+	if parsedIP.IsLoopback() || parsedIP.IsPrivate() || parsedIP.IsLinkLocalUnicast() || parsedIP.IsLinkLocalMulticast() || parsedIP.IsUnspecified() {
+		return true
 	}
 
-	for _, cidr := range privateRanges {
-		_, subnet, _ := net.ParseCIDR(cidr)
-		if subnet.Contains(parsedIP) {
-			return true
-		}
+	// CGNAT 100.64.0.0/10
+	if _, cgnat, _ := net.ParseCIDR("100.64.0.0/10"); cgnat.Contains(parsedIP) {
+		return true
 	}
 
 	return false
 }
 
-// getGeoLocationFromAPI retrieves geolocation information from ip-api.com
+// getGeoLocationFromAPI retrieves geolocation information from ipwho.is (HTTPS, no key)
 func getGeoLocationFromAPI(ip string) (*GeoLocation, error) {
-	// ip-api.com API endpoint
-	url := fmt.Sprintf("http://ip-api.com/json/%s?fields=status,country,countryCode,region,regionName,city,isp,lat,lon", ip)
+	url := fmt.Sprintf("https://ipwho.is/%s", ip)
 
 	client := &http.Client{
 		Timeout: 5 * time.Second,
@@ -164,32 +158,33 @@ func getGeoLocationFromAPI(ip string) (*GeoLocation, error) {
 	}
 
 	var apiResp struct {
-		Status      string  `json:"status"`
-		Country     string  `json:"country"`
-		CountryCode string  `json:"countryCode"`
-		Region      string  `json:"region"`
-		RegionName  string  `json:"regionName"`
-		City        string  `json:"city"`
-		ISP         string  `json:"isp"`
-		Lat         float64 `json:"lat"`
-		Lon         float64 `json:"lon"`
+		Success    bool   `json:"success"`
+		Country    string `json:"country"`
+		CountryCode string `json:"country_code"`
+		Region     string `json:"region"`
+		City       string `json:"city"`
+		Latitude   float64 `json:"latitude"`
+		Longitude  float64 `json:"longitude"`
+		Connection struct {
+			ISP string `json:"isp"`
+		} `json:"connection"`
 	}
 
 	if err := json.NewDecoder(resp.Body).Decode(&apiResp); err != nil {
 		return nil, fmt.Errorf("parse API response failed: %w", err)
 	}
 
-	if apiResp.Status != "success" {
+	if !apiResp.Success {
 		return nil, fmt.Errorf("API query failed for IP: %s", ip)
 	}
 
 	return &GeoLocation{
 		Country:     apiResp.Country,
 		CountryCode: apiResp.CountryCode,
-		Region:      apiResp.RegionName, // Use RegionName (e.g., "Guangdong") instead of Region (e.g., "GD")
+		Region:      apiResp.Region,
 		City:        apiResp.City,
-		ISP:         apiResp.ISP,
-		Latitude:    apiResp.Lat,
-		Longitude:   apiResp.Lon,
+		ISP:         apiResp.Connection.ISP,
+		Latitude:    apiResp.Latitude,
+		Longitude:   apiResp.Longitude,
 	}, nil
 }

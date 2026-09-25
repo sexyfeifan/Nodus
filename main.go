@@ -6,17 +6,17 @@ import (
 	"io/fs"
 	"log"
 
-	"Nodus/internal/application/dashboard"
-	"Nodus/internal/application/frpc"
-	"Nodus/internal/application/importer"
-	"Nodus/internal/application/monitoring"
-	"Nodus/internal/application/proxy"
-	"Nodus/internal/application/server"
-	"Nodus/internal/application/system"
-	"Nodus/internal/application/version"
-	"Nodus/internal/infrastructure/persistence"
-	httphandler "Nodus/internal/interfaces/http"
-	_ "Nodus/migrations"
+	"nodus/internal/application/dashboard"
+	"nodus/internal/application/frpc"
+	"nodus/internal/application/importer"
+	"nodus/internal/application/monitoring"
+	"nodus/internal/application/proxy"
+	"nodus/internal/application/server"
+	"nodus/internal/application/system"
+	"nodus/internal/application/version"
+	"nodus/internal/infrastructure/persistence"
+	httphandler "nodus/internal/interfaces/http"
+	_ "nodus/migrations"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
@@ -51,10 +51,8 @@ func main() {
 	networkMonitorService := monitoring.NewMonitorService(app, geoService, metricsService)
 	importService := importer.NewService(app)
 	versionService := version.NewService(app)
-	//githubService := github.NewService(app)
 
 	// HTTP Handlers
-	//githubHandler := httphandler.NewGithubHandler(app, githubService)
 	frpcHandler := httphandler.NewFrpcHandler(app, frpcService)
 	versionHandler := httphandler.NewVersionHandler(app, versionService)
 	dashboardHandler := httphandler.NewDashboardHandler(dashboardService)
@@ -77,6 +75,37 @@ func main() {
 		return e.Next()
 	})
 
+	// Hook: Reload frpc when a proxy is deleted so the change takes effect immediately
+	app.OnRecordAfterDeleteSuccess("fh_proxies").BindFunc(func(e *core.RecordEvent) error {
+		serverId := e.Record.GetString("serverId")
+		if serverId != "" && frpcService.IsServerRunning(serverId) {
+			app.Logger().Info("Proxy deleted, reloading frpc configuration", "proxyId", e.Record.Id, "serverId", serverId)
+			if err := frpcService.ReloadFrpc(&serverId); err != nil {
+				app.Logger().Error("Failed to reload frpc after proxy delete", "error", err, "serverId", serverId)
+			}
+		}
+		return e.Next()
+	})
+
+	// Hook: Stop frpc when a server is deleted to avoid orphaned processes
+	app.OnRecordAfterDeleteSuccess("fh_servers").BindFunc(func(e *core.RecordEvent) error {
+		serverId := e.Record.Id
+		if frpcService.IsServerRunning(serverId) {
+			app.Logger().Info("Server deleted, terminating frpc", "serverId", serverId)
+			if err := frpcService.TerminateFrpc(&serverId); err != nil {
+				app.Logger().Error("Failed to terminate frpc after server delete", "error", err, "serverId", serverId)
+			}
+		}
+		metricsService.InvalidateTarget(serverId)
+		return e.Next()
+	})
+
+	// Hook: Gracefully close all frpc clients on app shutdown
+	app.OnTerminate().BindFunc(func(e *core.TerminateEvent) error {
+		frpcService.CloseAll()
+		return e.Next()
+	})
+
 	// register custom routes
 	app.OnServe().BindFunc(func(e *core.ServeEvent) error {
 		// Reset all server statuses to stopped on startup
@@ -93,7 +122,6 @@ func main() {
 		metricsScheduler.Register()
 
 		// Register routes for each module
-		//githubHandler.RegisterHandlers(e)
 		frpcHandler.RegisterHandlers(e)
 		versionHandler.RegisterHandlers(e)
 		dashboardHandler.RegisterHandlers(e)

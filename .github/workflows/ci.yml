@@ -73,6 +73,9 @@ jobs:
       - name: go vet
         run: go vet ./...
 
+      - name: go test
+        run: go test ./...
+
       - name: Build (linux/amd64)
         env:
           CGO_ENABLED: '0'
@@ -81,7 +84,7 @@ jobs:
         run: |
           go build \
             -trimpath \
-            -ldflags "-s -w -X main.Version=ci -X main.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            -ldflags "-s -w -X nodus/pkg/buildinfo.AppVersion=ci -X nodus/pkg/buildinfo.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             -o /tmp/Nodus \
             main.go
 

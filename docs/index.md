@@ -18,7 +18,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: GitHub
-      link: https://github.com/luckjiawei/Nodus
+      link: https://github.com/sexyfeifan/Nodus
 
 features:
   - icon: 🖥️

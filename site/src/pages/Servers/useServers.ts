@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import pb from "../../lib/pocketbase";
 import { apiGet, apiPost } from "../../lib/api";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 export interface Server {
   id: string;
@@ -62,10 +63,13 @@ export interface Server {
 }
 
 export function useServers() {
+  const { t } = useTranslation();
   const [servers, setServers] = useState<Server[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const initializedRef = useRef(false);
+  const mountedRef = useRef(true);
+  const requestIdRef = useRef(0);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -73,8 +77,16 @@ export function useServers() {
 
   const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
   const fetchServers = useCallback(
     async (isRefresh = false) => {
+      const requestId = ++requestIdRef.current;
       try {
         if (!initializedRef.current) {
           setLoading(true);
@@ -92,18 +104,21 @@ export function useServers() {
         if (!res.ok) throw new Error("Failed to fetch servers");
         const data = await res.json();
 
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
         setServers(data.items);
         setTotalPages(data.totalPages);
         initializedRef.current = true;
       } catch (err) {
         if ((err as any)?.isAbort) return;
-        toast.error(err instanceof Error ? err.message : "Failed to fetch servers");
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
+        toast.error(err instanceof Error ? err.message : t("server.fetchFailed"));
       } finally {
+        if (!mountedRef.current || requestId !== requestIdRef.current) return;
         setLoading(false);
         setRefreshing(false);
       }
     },
-    [page, search]
+    [page, search, t]
   );
 
   useEffect(() => {
@@ -132,27 +147,37 @@ export function useServers() {
     try {
       await pb.collection("fh_servers").delete(id);
       await fetchServers();
-      toast.success("Server deleted successfully");
+      toast.success(t("server.deleteSuccess"));
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to delete server");
+      toast.error(err instanceof Error ? err.message : t("server.deleteFailed"));
     }
   };
 
   const launchServer = async (id: string) => {
-    console.log("launching server", id);
-    const response = await apiPost("/api/frpc/launch", { id });
-    if (response.ok) {
+    try {
+      const response = await apiPost("/api/frpc/launch", { id });
+      if (!response.ok) {
+        toast.error(t("server.launchFailed"));
+        return;
+      }
       await fetchServers();
-      toast.success("Server launched successfully");
+      toast.success(t("server.launchSuccess"));
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t("server.launchFailed"));
     }
   };
 
   const terminateServer = async (id: string) => {
-    console.log("terminating server", id);
-    const response = await apiPost("/api/frpc/terminate", { id });
-    if (response.ok) {
+    try {
+      const response = await apiPost("/api/frpc/terminate", { id });
+      if (!response.ok) {
+        toast.error(t("server.terminateFailed"));
+        return;
+      }
       await fetchServers();
-      toast.success("Server launched successfully");
+      toast.success(t("server.terminateSuccess"));
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : t("server.terminateFailed"));
     }
   };
 

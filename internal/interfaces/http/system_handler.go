@@ -1,7 +1,7 @@
 package httphandler
 
 import (
-	"Nodus/internal/application/system"
+	"nodus/internal/application/system"
 	"net/http"
 
 	"github.com/pocketbase/pocketbase/core"
@@ -45,7 +45,7 @@ func (h *SystemHandler) RegisterHandlers(e *core.ServeEvent) {
 	}))
 
 	// Update system settings
-	e.Router.PUT("/api/system/settings", requireAuth(func(e *core.RequestEvent) error {
+	e.Router.PUT("/api/system/settings", requireAdmin(func(e *core.RequestEvent) error {
 		var req system.UpdateSettingsRequest
 		if err := e.BindBody(&req); err != nil {
 			return e.JSON(http.StatusBadRequest, map[string]interface{}{

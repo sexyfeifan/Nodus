@@ -37,13 +37,25 @@ function useIsMobile() {
 }
 
 function isNewerVersion(latest: string, current: string): boolean {
-  const clean = (v: string) => v.replace(/^v/, "");
-  const parts = (v: string) => clean(v).split(".").map(Number);
-  const [la, lb, lc] = parts(latest);
-  const [ca, cb, cc] = parts(current);
-  if (la !== ca) return la > ca;
-  if (lb !== cb) return lb > cb;
-  return lc > cc;
+  // Split into dot-separated parts; take the leading integer of each part so
+  // prerelease/short tags ("1.2", "1.2.3-beta") don't produce NaN comparisons.
+  const parts = (v: string) =>
+    v
+      .replace(/^v/i, "")
+      .split(".")
+      .map((part) => {
+        const n = parseInt(part, 10);
+        return Number.isNaN(n) ? 0 : n;
+      });
+  const lp = parts(latest);
+  const cp = parts(current);
+  const len = Math.max(lp.length, cp.length);
+  for (let i = 0; i < len; i++) {
+    const lv = lp[i] ?? 0;
+    const cv = cp[i] ?? 0;
+    if (lv !== cv) return lv > cv;
+  }
+  return false;
 }
 
 const navItems = [
@@ -391,7 +403,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                     Author:
                   </Text>
                   <Link
-                    to="https://github.com/luckjiawei/"
+                    to="https://github.com/sexyfeifan/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-gray-12 cursor-pointer no-underline transition-colors"
@@ -404,7 +416,7 @@ export function MainLayout({ children }: MainLayoutProps) {
                   >
                     <Avatar
                       size="1"
-                      src="https://github.com/luckjiawei.png"
+                      src="https://github.com/sexyfeifan.png"
                       fallback="L"
                       radius="full"
                     />
@@ -418,7 +430,7 @@ export function MainLayout({ children }: MainLayoutProps) {
               {/* Right: Links */}
               <Flex align="center" gap="4">
                 <a
-                  href="https://github.com/luckjiawei/Nodus"
+                  href="https://github.com/sexyfeifan/Nodus"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="no-underline"

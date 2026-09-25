@@ -13,7 +13,7 @@ export function useSetup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [language, setLanguage] = useState<"en" | "zh">(
-    (localStorage.getItem("language") as "en" | "zh") || "en"
+    (localStorage.getItem("user-language") as "en" | "zh") || "en"
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -36,7 +36,7 @@ export function useSetup() {
   const handleLanguageChange = async (lang: "en" | "zh") => {
     setLanguage(lang);
     await i18n.changeLanguage(lang);
-    localStorage.setItem("language", lang);
+    localStorage.setItem("user-language", lang);
   };
 
   const validateForm = () => {

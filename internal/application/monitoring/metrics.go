@@ -96,6 +96,13 @@ func (s *MetricsService) getOrCreateServerTarget(serverID string) (string, error
 	return targetID, nil
 }
 
+// InvalidateTarget drops a server from the metrics target cache (call on server delete).
+func (s *MetricsService) InvalidateTarget(serverID string) {
+	s.targetCacheLock.Lock()
+	defer s.targetCacheLock.Unlock()
+	delete(s.targetCache, serverID)
+}
+
 // GetLatestLatencyBatch returns the most recent latency for every server in one SQL query.
 // The returned map key is the server ID.
 func (s *MetricsService) GetLatestLatencyBatch() (map[string]*NetworkStatus, error) {

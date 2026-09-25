@@ -15,10 +15,12 @@ interface ServerLogViewerProps {
 export function ServerLogViewer({ serverId, height = 300, showHeading = true }: ServerLogViewerProps) {
   const { t } = useTranslation();
   const [logs, setLogs] = useState<string[]>([]);
+  const [streamError, setStreamError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // SSE log streaming
   useEffect(() => {
+    setStreamError(null);
     const token = pb.authStore.token;
     const es = new EventSource(`/api/frpc/logs/stream?id=${serverId}&token=${token}`);
 
@@ -32,12 +34,13 @@ export function ServerLogViewer({ serverId, height = 300, showHeading = true }: 
 
     es.onerror = () => {
       es.close();
+      setStreamError(t("server.logStreamFailed"));
     };
 
     return () => {
       es.close();
     };
-  }, [serverId]);
+  }, [serverId, t]);
 
   // Auto-scroll to bottom on new logs
   useEffect(() => {
@@ -88,6 +91,11 @@ export function ServerLogViewer({ serverId, height = 300, showHeading = true }: 
         ) : (
           <Text color="gray" style={{ fontStyle: "italic" }}>
             {t("server.noLogsAvailable")}
+          </Text>
+        )}
+        {streamError && (
+          <Text color="red" style={{ display: "block", marginTop: "8px" }}>
+            {streamError}
           </Text>
         )}
       </Box>

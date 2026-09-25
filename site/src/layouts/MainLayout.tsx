@@ -417,11 +417,11 @@ export function MainLayout({ children }: MainLayoutProps) {
                     <Avatar
                       size="1"
                       src="https://github.com/sexyfeifan.png"
-                      fallback="L"
+                      fallback="S"
                       radius="full"
                     />
                     <Text weight="medium" size="1">
-                      liujiawei
+                      sexyfeifan
                     </Text>
                   </Link>
                 </Flex>

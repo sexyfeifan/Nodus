@@ -88,15 +88,15 @@ docker compose -f deploy/docker-compose.yml up -d
 Pinned version:
 
 ```bash
-docker pull sexyfeifan/nodus:0.0.6
+docker pull sexyfeifan/nodus:0.0.7
 ```
 
 ### Option 3: Binary
 
-Download the archive for your platform from [Releases](https://github.com/sexyfeifan/Nodus/releases/latest) (the filename includes the version, e.g. `Nodus-v0.0.6-linux-amd64.tar.gz`):
+Download the archive for your platform from [Releases](https://github.com/sexyfeifan/Nodus/releases/latest) (the filename includes the version, e.g. `Nodus-v0.0.7-linux-amd64.tar.gz`):
 
 ```bash
-tar -xzf Nodus-v0.0.6-linux-amd64.tar.gz
+tar -xzf Nodus-v0.0.7-linux-amd64.tar.gz
 ./Nodus serve --http 0.0.0.0:8090
 ```
 
@@ -148,6 +148,7 @@ Step-by-step instructions, manual migration, **copy-paste agent instructions for
 - 2026-09-26: v0.0.4 — copy cleanup, golangci-lint green, UI author badge
 - 2026-09-26: v0.0.5 — login docs, version display fix, proxy access button
 - 2026-09-26: v0.0.6 — upgrade embedded frp to v0.71.0
+- 2026-09-26: v0.0.7 — clean proxy names in frp config (no ID suffix)
 
 ## License
 

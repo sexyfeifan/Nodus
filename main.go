@@ -60,6 +60,20 @@ func main() {
 	importHandler := httphandler.NewImportHandler(app, importService)
 	serverHandler := httphandler.NewServerHandler(app, metricsService)
 
+	// Hook: Prevent privilege escalation — self-service user updates must not
+	// change the role field (collection rules cannot restrict individual fields).
+	app.OnRecordUpdateRequest("fh_users").BindFunc(func(e *core.RecordRequestEvent) error {
+		newRole := e.Record.GetString("role")
+		oldRole := e.Record.Original().GetString("role")
+		if newRole != oldRole {
+			isAdmin := e.Auth != nil && e.Auth.GetString("role") == "admin"
+			if !isAdmin {
+				return apis.NewForbiddenError("Only admins can change user roles", nil)
+			}
+		}
+		return e.Next()
+	})
+
 	// Hook: Reload frpc when proxy is updated
 	app.OnRecordAfterUpdateSuccess("fh_proxies").BindFunc(func(e *core.RecordEvent) error {
 		serverId := e.Record.GetString("serverId")

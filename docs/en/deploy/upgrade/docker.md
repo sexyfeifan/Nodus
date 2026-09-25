@@ -46,10 +46,10 @@ To target a specific version instead of `latest`, set the image tag:
 
 ```bash
 # Docker Compose: set via environment variable
-VERSION=v1.2.0 docker compose up -d
+VERSION=0.0.2 docker compose up -d
 
 # Or edit the image field in docker-compose.yml
-image: sexyfeifan/nodus:v1.2.0
+image: sexyfeifan/nodus:0.0.2
 ```
 
 ## Rollback
@@ -61,7 +61,7 @@ If issues occur after upgrading, switch back to the previous version:
 docker compose down
 
 # Set the old version and start
-VERSION=v1.1.0 docker compose up -d
+VERSION=0.0.1 docker compose up -d
 ```
 
 ::: tip

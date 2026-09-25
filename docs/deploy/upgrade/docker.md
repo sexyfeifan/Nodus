@@ -46,10 +46,10 @@ docker run -d \
 
 ```bash
 # Docker Compose：设置环境变量
-VERSION=v1.2.0 docker compose up -d
+VERSION=0.0.2 docker compose up -d
 
 # 或编辑 docker-compose.yml 中的 image 字段
-image: sexyfeifan/nodus:v1.2.0
+image: sexyfeifan/nodus:0.0.2
 ```
 
 ## 回滚
@@ -61,7 +61,7 @@ image: sexyfeifan/nodus:v1.2.0
 docker compose down
 
 # 修改 docker-compose.yml 中的版本号为旧版本，然后启动
-VERSION=v1.1.0 docker compose up -d
+VERSION=0.0.1 docker compose up -d
 ```
 
 ::: tip

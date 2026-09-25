@@ -12,17 +12,17 @@
 
 | 系统 | 架构 | 文件名 |
 | --- | --- | --- |
-| Linux | x86_64 (amd64) | `Nodus-linux-amd64.tar.gz` |
-| Linux | ARM64 | `Nodus-linux-arm64.tar.gz` |
-| Linux | ARMv7 | `Nodus-linux-armv7.tar.gz` |
-| macOS | Intel | `Nodus-darwin-amd64.tar.gz` |
-| macOS | Apple Silicon | `Nodus-darwin-arm64.tar.gz` |
-| Windows | x86_64 | `Nodus-windows-amd64.zip` |
+| Linux | x86_64 (amd64) | `Nodus-v0.0.2-linux-amd64.tar.gz` |
+| Linux | ARM64 | `Nodus-v0.0.2-linux-arm64.tar.gz` |
+| Linux | ARMv7 | `Nodus-v0.0.2-linux-arm.tar.gz` |
+| macOS | Intel | `Nodus-v0.0.2-darwin-amd64.tar.gz` |
+| macOS | Apple Silicon | `Nodus-v0.0.2-darwin-arm64.tar.gz` |
+| Windows | x86_64 | `Nodus-v0.0.2-windows-amd64.zip` |
 
 也可以通过命令行直接下载（以 Linux amd64 为例）：
 
 ```bash
-curl -LO https://github.com/sexyfeifan/Nodus/releases/latest/download/Nodus-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.2/Nodus-v0.0.2-linux-amd64.tar.gz
 ```
 
 ## 安装
@@ -31,7 +31,7 @@ curl -LO https://github.com/sexyfeifan/Nodus/releases/latest/download/Nodus-linu
 
 ```bash
 # 解压
-tar -xzf Nodus-linux-amd64.tar.gz
+tar -xzf Nodus-v0.0.2-linux-amd64.tar.gz
 
 # 移动到系统路径（可选）
 sudo mv Nodus /usr/local/bin/

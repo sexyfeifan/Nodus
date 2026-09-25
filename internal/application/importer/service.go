@@ -130,7 +130,7 @@ func NewService(app core.App) *Service {
 func (s *Service) ParseToml(req *ParseTomlRequest) (*ImportPreviewResponse, error) {
 	var cfg tomlFrpClientConfig
 	if err := toml.Unmarshal([]byte(req.TomlContent), &cfg); err != nil {
-		return nil, fmt.Errorf("TOML 解析失败: %w", err)
+		return nil, fmt.Errorf("failed to parse TOML: %w", err)
 	}
 
 	serverPort := cfg.ServerPort
@@ -156,7 +156,7 @@ func (s *Service) ParseToml(req *ParseTomlRequest) (*ImportPreviewResponse, erro
 		serverDuplicate = true
 		existingServerId = existingServerRow.Id
 	} else if !errors.Is(err, sql.ErrNoRows) {
-		return nil, fmt.Errorf("检查服务器是否已存在失败: %w", err)
+		return nil, fmt.Errorf("failed to check existing server: %w", err)
 	}
 
 	// Build auth map
@@ -259,7 +259,7 @@ func (s *Service) ParseToml(req *ParseTomlRequest) (*ImportPreviewResponse, erro
 				proxyInfo.IsDuplicate = true
 				proxyInfo.ExistingId = existingProxyRow.Id
 			} else if !errors.Is(perr, sql.ErrNoRows) {
-				return nil, fmt.Errorf("检查代理 %s 是否已存在失败: %w", p.Name, perr)
+				return nil, fmt.Errorf("failed to check existing proxy %s: %w", p.Name, perr)
 			}
 		}
 
@@ -275,7 +275,7 @@ func (s *Service) ParseToml(req *ParseTomlRequest) (*ImportPreviewResponse, erro
 func (s *Service) ExecuteImport(req *ExecuteImportRequest) (*ImportResult, error) {
 	var cfg tomlFrpClientConfig
 	if err := toml.Unmarshal([]byte(req.TomlContent), &cfg); err != nil {
-		return nil, fmt.Errorf("TOML 解析失败: %w", err)
+		return nil, fmt.Errorf("failed to parse TOML: %w", err)
 	}
 
 	serverPort := cfg.ServerPort
@@ -326,7 +326,7 @@ func (s *Service) handleServerImport(
 	if existErr == nil {
 		serverExists = true
 	} else if !errors.Is(existErr, sql.ErrNoRows) {
-		return "", fmt.Errorf("检查服务器是否已存在失败: %w", existErr)
+		return "", fmt.Errorf("failed to check existing server: %w", existErr)
 	}
 
 	// Server exists but we're not importing: use existing ID for proxies
@@ -385,14 +385,14 @@ func (s *Service) handleServerImport(
 
 	serversCollection, err := txApp.FindCollectionByNameOrId("fh_servers")
 	if err != nil {
-		return "", fmt.Errorf("找不到服务器集合: %w", err)
+		return "", fmt.Errorf("failed to find servers collection: %w", err)
 	}
 
 	var serverRecord *core.Record
 	if serverExists && req.OverwriteServer {
 		serverRecord, err = txApp.FindRecordById(serversCollection, existingServerRow.Id)
 		if err != nil {
-			return "", fmt.Errorf("查找已有服务器失败: %w", err)
+			return "", fmt.Errorf("failed to query existing server: %w", err)
 		}
 	} else if serverExists && !req.OverwriteServer {
 		result.ServerImported = false
@@ -415,7 +415,7 @@ func (s *Service) handleServerImport(
 	serverRecord.Set("description", "")
 
 	if err := txApp.Save(serverRecord); err != nil {
-		return "", fmt.Errorf("保存服务器失败: %w", err)
+		return "", fmt.Errorf("failed to save server: %w", err)
 	}
 
 	result.ServerImported = true
@@ -437,7 +437,7 @@ func (s *Service) handleProxyImport(
 
 	proxiesCollection, err := txApp.FindCollectionByNameOrId("fh_proxies")
 	if err != nil {
-		return fmt.Errorf("找不到代理集合: %w", err)
+		return fmt.Errorf("failed to find proxies collection: %w", err)
 	}
 
 	for _, p := range cfg.Proxies {
@@ -460,14 +460,14 @@ func (s *Service) handleProxyImport(
 			One(&existingProxyRow)
 
 		if proxyExistsErr != nil && !errors.Is(proxyExistsErr, sql.ErrNoRows) {
-			return fmt.Errorf("检查代理 %s 是否已存在失败: %w", p.Name, proxyExistsErr)
+			return fmt.Errorf("failed to check existing proxy %s: %w", p.Name, proxyExistsErr)
 		}
 
 		var proxyRecord *core.Record
 		if proxyExistsErr == nil && opt.Overwrite {
 			proxyRecord, err = txApp.FindRecordById(proxiesCollection, existingProxyRow.Id)
 			if err != nil {
-				return fmt.Errorf("查找已有代理 %s 失败: %w", p.Name, err)
+				return fmt.Errorf("failed to query existing proxy %s: %w", p.Name, err)
 			}
 		} else if proxyExistsErr == nil && !opt.Overwrite {
 			result.ProxiesSkipped++
@@ -506,7 +506,7 @@ func (s *Service) handleProxyImport(
 		proxyRecord.Set("description", "")
 
 		if err := txApp.Save(proxyRecord); err != nil {
-			return fmt.Errorf("保存代理 %s 失败: %w", p.Name, err)
+			return fmt.Errorf("failed to save proxy %s: %w", p.Name, err)
 		}
 		result.ProxiesImported++
 	}

@@ -63,7 +63,8 @@
 - 2026-03-16: Released v0.1.3
 - 2026-03-25: Released v0.1.4
 - 2026-03-26: Released v0.1.5
-- 2026-03-31: Released v0.1.6
+- 2026-03-31: Released v0.1.6 (upstream podux)
+- 2026-09-25: Nodus v0.0.1 — first release of Nodus (based on podux v0.1.6)
 
 ## License
 

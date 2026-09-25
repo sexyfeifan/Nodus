@@ -362,7 +362,8 @@
     "createSuccess": "代理创建成功",
     "updateSuccess": "代理更新成功",
     "saveFailed": "保存代理失败",
-    "loadFailed": "加载代理失败"
+    "loadFailed": "加载代理失败",
+    "openAccess": "打开访问"
   },
   "settings": {
     "title": "设置",

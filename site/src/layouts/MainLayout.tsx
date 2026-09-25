@@ -101,7 +101,7 @@ export function MainLayout({ children }: MainLayoutProps) {
   useEffect(() => {
     apiGet("/api/system/version")
       .then((res) => res.json())
-      .then((data) => data.version && setAppVersion(data.version))
+      .then((data) => data.version && setAppVersion(data.version.replace(/^v/, "")))
       .catch(() => {});
 
     apiGet("/api/system/latest-version")

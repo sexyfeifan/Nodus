@@ -362,7 +362,8 @@
     "createSuccess": "Proxy created successfully",
     "updateSuccess": "Proxy updated successfully",
     "saveFailed": "Failed to save proxy",
-    "loadFailed": "Failed to load proxy"
+    "loadFailed": "Failed to load proxy",
+    "openAccess": "Open"
   },
   "settings": {
     "title": "Settings",

@@ -102,6 +102,20 @@ tar -xzf Nodus-v0.0.4-linux-amd64.tar.gz
 
 Then open `http://<server>:8090` and create the admin account.
 
+## Login Information
+
+Nodus ships **without default credentials** — you create your account on first visit.
+
+| Entry | URL | Description |
+| --- | --- | --- |
+| User panel (main UI) | `http://<server>:8090` | Email + password created on first visit; manages servers and proxies |
+| Admin console (PocketBase Admin) | `http://<server>:8090/_/` | Superuser email + password created on first visit; for database management |
+| frps server token | — | Required when adding a server node; configured in your frps `auth.token` |
+
+::: tip Forgot password?
+Reset the user panel password via the PocketBase Admin console (`/_/`) in the `fh_users` collection.
+:::
+
 ## Migrating from podux / frpc-hub / frpc
 
 Nodus shares the same PocketBase data layout as podux / frpc-hub, so copying `pb_data` migrates everything without loss. Native frpc configs are imported through the import API.
@@ -128,7 +142,7 @@ Step-by-step instructions, manual migration, **copy-paste agent instructions for
 
 ## Release Timeline
 
-- 2026-09-25: v0.0.1 — first Nodus release (based on podux v0.1.6)
+- 2026-09-25: v0.0.1 — first Nodus release
 - 2026-09-25: v0.0.2 — security hardening and defect fixes
 - 2026-09-25: v0.0.3 — role-escalation fix and docs asset names
 - 2026-09-26: v0.0.4 — copy cleanup, golangci-lint green, UI author badge

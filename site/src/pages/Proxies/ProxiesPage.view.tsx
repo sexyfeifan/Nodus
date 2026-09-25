@@ -391,6 +391,33 @@ export function ProxiesView({
                         </Table.Cell>
                         <Table.Cell>
                           <Flex gap="2">
+                            {(() => {
+                              const serverAddr =
+                                (proxy as { expand?: { serverId?: { serverAddr?: string } } }).expand?.serverId?.serverAddr || "";
+                              let accessUrl = "";
+                              if (proxy.proxyType === "http" || proxy.proxyType === "https") {
+                                const scheme = proxy.proxyType === "https" ? "https" : "http";
+                                const domain =
+                                  (proxy.customDomains && proxy.customDomains[0]) ||
+                                  (proxy.subdomain && serverAddr ? `${proxy.subdomain}.${serverAddr}` : "");
+                                if (domain) accessUrl = `${scheme}://${domain}`;
+                              } else if (proxy.remotePort && serverAddr) {
+                                accessUrl = `http://${serverAddr}:${proxy.remotePort}`;
+                              }
+                              if (!accessUrl) return null;
+                              return (
+                                <Button
+                                  size="1"
+                                  variant="soft"
+                                  color="green"
+                                  onClick={() => window.open(accessUrl, "_blank", "noopener,noreferrer")}
+                                  title={accessUrl}
+                                >
+                                  <Icon icon="lucide:external-link" width="14" height="14" />
+                                  {t("proxy.openAccess")}
+                                </Button>
+                              );
+                            })()}
                             <Button
                               size="1"
                               variant="soft"

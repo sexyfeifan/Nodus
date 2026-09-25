@@ -20,8 +20,13 @@ func ReadLastNLines(file *os.File, n int) []string {
 		pos -= chunkSize
 
 		chunk := make([]byte, chunkSize)
-		file.ReadAt(chunk, pos)
-		buf = append(chunk, buf...)
+		n, err := file.ReadAt(chunk, pos)
+		if n > 0 {
+			buf = append(chunk[:n], buf...)
+		}
+		if err != nil {
+			break
+		}
 
 		// Count newlines; stop reading more chunks once we have enough
 		count := 0

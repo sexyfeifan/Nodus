@@ -186,7 +186,7 @@ func (h *ServerHandler) RegisterHandlers(e *core.ServeEvent) {
 
 		points := make([]probePoint, 0, len(rows))
 		for _, r := range rows {
-			points = append(points, probePoint{T: r.T, Val: r.Val})
+			points = append(points, probePoint(r))
 		}
 		return e.JSON(200, points)
 	}))

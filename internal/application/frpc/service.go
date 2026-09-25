@@ -246,7 +246,9 @@ func (fs *Service) LaunchFrpc(serverId *string) error {
 
 	fs.app.Logger().Info("FRP Configuration", "common", string(safeCommon), "proxies", string(safeProxies))
 
-	cfg.Complete()
+	if err := cfg.Complete(); err != nil {
+		return fmt.Errorf("complete frp config: %w", err)
+	}
 	log.InitLogger(cfg.Log.To, cfg.Log.Level, int(cfg.Log.MaxDays), cfg.Log.DisablePrintColor)
 
 	configSrc := frpcsource.NewConfigSource()
@@ -273,7 +275,9 @@ func (fs *Service) LaunchFrpc(serverId *string) error {
 	fs.statusMonitors[*serverId] = cancel
 	fs.mu.Unlock()
 
-	fs.serverRepo.UpdateBootStatus(*serverId, serverdomain.ServerStatusRunning)
+	if err := fs.serverRepo.UpdateBootStatus(*serverId, serverdomain.ServerStatusRunning); err != nil {
+		fs.app.Logger().Warn("Failed to mark server running", "id", *serverId, "error", err)
+	}
 
 	done := make(chan error, 1)
 
@@ -307,7 +311,9 @@ func (fs *Service) monitorServiceStatus(id *string, svr *client.Service, ctx con
 		fs.destroying(id)
 		return
 	default:
-		fs.serverRepo.UpdateBootStatus(*id, serverdomain.ServerStatusRunning)
+		if err := fs.serverRepo.UpdateBootStatus(*id, serverdomain.ServerStatusRunning); err != nil {
+			fs.app.Logger().Warn("Failed to mark server running", "id", *id, "error", err)
+		}
 		fs.app.Logger().Info("Service is running", "id", *id)
 	}
 
@@ -337,8 +343,12 @@ func (fs *Service) monitorServiceStatus(id *string, svr *client.Service, ctx con
 }
 
 func (fs *Service) destroying(id *string) {
-	fs.serverRepo.UpdateBootStatus(*id, serverdomain.ServerStatusStopped)
-	fs.proxyRepo.UpdateBootStatusByServerID(*id, proxydomain.ProxyBootStatusOffline)
+	if err := fs.serverRepo.UpdateBootStatus(*id, serverdomain.ServerStatusStopped); err != nil {
+		fs.app.Logger().Warn("Failed to mark server stopped", "id", *id, "error", err)
+	}
+	if err := fs.proxyRepo.UpdateBootStatusByServerID(*id, proxydomain.ProxyBootStatusOffline); err != nil {
+		fs.app.Logger().Warn("Failed to mark proxies offline", "id", *id, "error", err)
+	}
 	fs.mu.Lock()
 	delete(fs.processes, *id)
 	delete(fs.statusMonitors, *id)
@@ -386,10 +396,14 @@ func (fs *Service) monitorProxyStatus(serverId *string, svr *client.Service, ctx
 					default:
 						bootStatus = proxydomain.ProxyBootStatusOffline
 					}
-					fs.proxyRepo.UpdateBootStatus(proxy.Id, bootStatus)
+					if err := fs.proxyRepo.UpdateBootStatus(proxy.Id, bootStatus); err != nil {
+						fs.app.Logger().Warn("Failed to update proxy status", "proxyId", proxy.Id, "error", err)
+					}
 				} else {
 					// Proxy is not in frp (disabled or removed) — mark as offline
-					fs.proxyRepo.UpdateBootStatus(proxy.Id, proxydomain.ProxyBootStatusOffline)
+					if err := fs.proxyRepo.UpdateBootStatus(proxy.Id, proxydomain.ProxyBootStatusOffline); err != nil {
+						fs.app.Logger().Warn("Failed to update proxy status", "proxyId", proxy.Id, "error", err)
+					}
 				}
 			}
 		}
@@ -421,7 +435,7 @@ func (fs *Service) getFrpMainPath(id *string) string {
 // It sends the last 50 lines as initial content, then tails new lines every 500ms.
 func (fs *Service) StreamLog(serverId string, ctx context.Context, w http.ResponseWriter, flusher http.Flusher) {
 	if !validServerID.MatchString(serverId) {
-		fmt.Fprintf(w, "data: [invalid server id]\n\n")
+		_, _ = fmt.Fprintf(w, "data: [invalid server id]\n\n")
 		flusher.Flush()
 		return
 	}
@@ -431,20 +445,20 @@ func (fs *Service) StreamLog(serverId string, ctx context.Context, w http.Respon
 	file, err := os.Open(logPath)
 	if err != nil {
 		fs.app.Logger().Warn("Log file not found", "serverId", serverId, "path", logPath, "error", err)
-		fmt.Fprintf(w, "data: [No log file found]\n\n")
+		_, _ = fmt.Fprintf(w, "data: [No log file found]\n\n")
 		flusher.Flush()
 		return
 	}
 	defer func() {
 		if file != nil {
-			file.Close()
+			_ = file.Close()
 		}
 	}()
 
 	initialLines := utils.ReadLastNLines(file, 50)
 	fs.app.Logger().Info("Streaming log file", "serverId", serverId, "initialLines", len(initialLines))
 	for _, line := range initialLines {
-		fmt.Fprintf(w, "data: %s\n\n", line)
+		_, _ = fmt.Fprintf(w, "data: %s\n\n", line)
 	}
 	flusher.Flush()
 
@@ -467,7 +481,7 @@ func (fs *Service) StreamLog(serverId string, ctx context.Context, w http.Respon
 			}
 
 			if fi.Size() < offset {
-				file.Close()
+				_ = file.Close()
 				file, err = os.Open(logPath)
 				if err != nil {
 					file = nil
@@ -476,13 +490,15 @@ func (fs *Service) StreamLog(serverId string, ctx context.Context, w http.Respon
 				offset = 0
 			}
 
-			file.Seek(offset, io.SeekStart)
+			if _, err := file.Seek(offset, io.SeekStart); err != nil {
+				continue
+			}
 			scanner := bufio.NewScanner(file)
 			hasData := false
 			for scanner.Scan() {
 				line := scanner.Text()
 				if line != "" {
-					fmt.Fprintf(w, "data: %s\n\n", line)
+					_, _ = fmt.Fprintf(w, "data: %s\n\n", line)
 					hasData = true
 				}
 			}
@@ -515,7 +531,9 @@ func (fs *Service) ReloadFrpc(serverId *string) error {
 		return errors.New("server is not running")
 	}
 	// TODO 2026-02-08 reload visitorCfgs
-	svr.UpdateAllConfigurer(proxyCfgs, nil)
+	if err := svr.UpdateAllConfigurer(proxyCfgs, nil); err != nil {
+		return fmt.Errorf("update frpc configurers: %w", err)
+	}
 
 	return nil
 }

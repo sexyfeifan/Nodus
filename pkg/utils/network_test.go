@@ -75,11 +75,11 @@ func TestPingHostIPv6PortHandling(t *testing.T) {
 	if err != nil {
 		t.Skip("IPv6 loopback unavailable")
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 	go func() {
 		conn, err := ln.Accept()
 		if err == nil {
-			conn.Close()
+			_ = conn.Close()
 		}
 	}()
 

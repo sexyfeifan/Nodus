@@ -64,7 +64,7 @@
 
 ```bash
 # Docker
-docker pull sexyfeifan/nodus:0.0.2
+docker pull sexyfeifan/nodus:0.0.3
 ```
 
 Or download platform binaries from [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest). See the [install docs](https://github.com/sexyfeifan/Nodus/tree/main/docs/en/deploy).

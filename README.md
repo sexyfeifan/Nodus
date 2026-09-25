@@ -59,12 +59,13 @@
 
 - 2026-09-25: 发布 v0.0.1 — Nodus 首个版本（基于 podux v0.1.6）
 - 2026-09-25: 发布 v0.0.2 — 安全加固与全面缺陷修复
+- 2026-09-25: 发布 v0.0.3 — 修复角色提权漏洞与文档资产名
 
 ## 安装
 
 ```bash
 # Docker
-docker pull sexyfeifan/nodus:0.0.2
+docker pull sexyfeifan/nodus:0.0.3
 ```
 
 或前往 [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) 下载各平台二进制包，详见 [安装文档](https://github.com/sexyfeifan/Nodus/tree/main/docs/deploy)。

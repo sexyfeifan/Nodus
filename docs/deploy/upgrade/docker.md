@@ -46,10 +46,10 @@ docker run -d \
 
 ```bash
 # Docker Compose：设置环境变量
-VERSION=0.0.2 docker compose up -d
+VERSION=0.0.3 docker compose up -d
 
 # 或编辑 docker-compose.yml 中的 image 字段
-image: sexyfeifan/nodus:0.0.2
+image: sexyfeifan/nodus:0.0.3
 ```
 
 ## 回滚

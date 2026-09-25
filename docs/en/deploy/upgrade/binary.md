@@ -33,8 +33,8 @@ pkill Nodus
 Visit [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) for the latest version, or download via command line (Linux amd64 example):
 
 ```bash
-curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.2/Nodus-v0.0.2-linux-amd64.tar.gz
-tar -xzf Nodus-v0.0.2-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.3/Nodus-v0.0.3-linux-amd64.tar.gz
+tar -xzf Nodus-v0.0.3-linux-amd64.tar.gz
 ```
 
 ### 4. Replace the Binary

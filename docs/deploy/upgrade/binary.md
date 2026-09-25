@@ -33,8 +33,8 @@ pkill Nodus
 前往 [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest) 查看最新版本，或通过命令行下载（以 Linux amd64 为例）：
 
 ```bash
-curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.2/Nodus-v0.0.2-linux-amd64.tar.gz
-tar -xzf Nodus-v0.0.2-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.3/Nodus-v0.0.3-linux-amd64.tar.gz
+tar -xzf Nodus-v0.0.3-linux-amd64.tar.gz
 ```
 
 ### 4. 替换二进制文件

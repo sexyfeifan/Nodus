@@ -12,17 +12,17 @@ Go to the [GitHub Releases](https://github.com/sexyfeifan/Nodus/releases/latest)
 
 | OS | Architecture | Filename |
 | --- | --- | --- |
-| Linux | x86_64 (amd64) | `Nodus-v0.0.2-linux-amd64.tar.gz` |
-| Linux | ARM64 | `Nodus-v0.0.2-linux-arm64.tar.gz` |
-| Linux | ARMv7 | `Nodus-v0.0.2-linux-arm.tar.gz` |
-| macOS | Intel | `Nodus-v0.0.2-darwin-amd64.tar.gz` |
-| macOS | Apple Silicon | `Nodus-v0.0.2-darwin-arm64.tar.gz` |
-| Windows | x86_64 | `Nodus-v0.0.2-windows-amd64.zip` |
+| Linux | x86_64 (amd64) | `Nodus-v0.0.3-linux-amd64.tar.gz` |
+| Linux | ARM64 | `Nodus-v0.0.3-linux-arm64.tar.gz` |
+| Linux | ARMv7 | `Nodus-v0.0.3-linux-arm.tar.gz` |
+| macOS | Intel | `Nodus-v0.0.3-darwin-amd64.tar.gz` |
+| macOS | Apple Silicon | `Nodus-v0.0.3-darwin-arm64.tar.gz` |
+| Windows | x86_64 | `Nodus-v0.0.3-windows-amd64.zip` |
 
 Or download directly from the command line (Linux amd64 example):
 
 ```bash
-curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.2/Nodus-v0.0.2-linux-amd64.tar.gz
+curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.3/Nodus-v0.0.3-linux-amd64.tar.gz
 ```
 
 ## Install
@@ -31,7 +31,7 @@ curl -LO https://github.com/sexyfeifan/Nodus/releases/download/v0.0.2/Nodus-v0.0
 
 ```bash
 # Extract
-tar -xzf Nodus-v0.0.2-linux-amd64.tar.gz
+tar -xzf Nodus-v0.0.3-linux-amd64.tar.gz
 
 # Move to system path (optional)
 sudo mv Nodus /usr/local/bin/

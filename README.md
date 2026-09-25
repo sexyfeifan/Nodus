@@ -55,7 +55,7 @@
 | --- | --- |
 | Go | 1.25 |
 | PocketBase | 0.35.0 |
-| frp | 0.68.0 |
+| frp | 0.71.0 |
 | React / TypeScript / Vite | 19 / 5.9 / 7 |
 
 ## 快速部署
@@ -88,15 +88,15 @@ docker compose -f deploy/docker-compose.yml up -d
 固定版本：
 
 ```bash
-docker pull sexyfeifan/nodus:0.0.5
+docker pull sexyfeifan/nodus:0.0.6
 ```
 
 ### 方式三：二进制
 
-到 [Releases](https://github.com/sexyfeifan/Nodus/releases/latest) 下载对应平台压缩包（文件名含版本号，例如 `Nodus-v0.0.5-linux-amd64.tar.gz`）：
+到 [Releases](https://github.com/sexyfeifan/Nodus/releases/latest) 下载对应平台压缩包（文件名含版本号，例如 `Nodus-v0.0.6-linux-amd64.tar.gz`）：
 
 ```bash
-tar -xzf Nodus-v0.0.5-linux-amd64.tar.gz
+tar -xzf Nodus-v0.0.6-linux-amd64.tar.gz
 ./Nodus serve --http 0.0.0.0:8090
 ```
 
@@ -147,6 +147,7 @@ bash scripts/migrate-to-nodus.sh
 - 2026-09-25: 发布 v0.0.3 — 修复角色提权漏洞与文档资产名
 - 2026-09-26: 发布 v0.0.4 — 文案修正、golangci-lint 清零、UI 作者署名更新
 - 2026-09-26: 发布 v0.0.5 — 登录说明、版本号修复、代理页面访问按钮
+- 2026-09-26: 发布 v0.0.6 — 内置 frp 升级至 v0.71.0
 
 ## License
 

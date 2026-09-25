@@ -170,7 +170,7 @@ func (fs *Service) genProxyCfgs(serverId *string) ([]v1.ProxyConfigurer, error) 
 		}
 		proxyData["type"] = proxyMap.ProxyType
 		delete(proxyData, "proxyType")
-		proxyData["name"] = proxyMap.Name + "-" + proxyMap.Id
+		proxyData["name"] = proxyMap.Name
 
 		// Remove empty plugin map so frp doesn't try to parse a typeless plugin
 		if plugin, ok := proxyData["plugin"].(map[string]interface{}); ok {
@@ -377,7 +377,7 @@ func (fs *Service) monitorProxyStatus(serverId *string, svr *client.Service, ctx
 			}
 
 			for _, proxy := range proxies {
-				baseName := proxy.Name + "-" + proxy.Id
+				baseName := proxy.Name
 				status, exists := statusExporter.GetProxyStatus(baseName)
 				fs.app.Logger().Info("proxy status check", "baseName", baseName, "exists", exists, "phase", func() string {
 					if status != nil {

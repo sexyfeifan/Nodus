@@ -74,6 +74,29 @@ func main() {
 		return e.Next()
 	})
 
+	// Hook: Enforce unique proxy names within the same server so frp config
+	// stays valid (frp requires unique proxy names per client).
+	checkProxyNameUnique := func(e *core.RecordRequestEvent) error {
+		name := e.Record.GetString("name")
+		serverId := e.Record.GetString("serverId")
+		if name == "" || serverId == "" {
+			return e.Next()
+		}
+		filter := "name = {:name} && serverId = {:serverId}"
+		params := map[string]any{"name": name, "serverId": serverId}
+		if e.Record.Id != "" {
+			filter += " && id != {:id}"
+			params["id"] = e.Record.Id
+		}
+		_, err := e.App.FindFirstRecordByFilter("fh_proxies", filter, params)
+		if err == nil {
+			return apis.NewBadRequestError("A proxy with this name already exists on the selected server", nil)
+		}
+		return e.Next()
+	}
+	app.OnRecordCreateRequest("fh_proxies").BindFunc(checkProxyNameUnique)
+	app.OnRecordUpdateRequest("fh_proxies").BindFunc(checkProxyNameUnique)
+
 	// Hook: Reload frpc when proxy is updated
 	app.OnRecordAfterUpdateSuccess("fh_proxies").BindFunc(func(e *core.RecordEvent) error {
 		serverId := e.Record.GetString("serverId")
